@@ -88,6 +88,15 @@ main = do
              "vifm"
              "Vifm already installed at "
              "Vifm already installed."
+  -- The follewing tool always gets installed
+  aptInstall "apt-transport-https" "apt-transport-https" "" ""
+  aptInstall "curl" "curl" "cURL already installed at " "cURL already installed."
+  -- Need to pipe some things together to get Brave to download correctly
+  -- https://brave-browser.readthedocs.io/en/latest/installing-brave.html#linux
+  gotBraveKey <- inshellWithErr "curl -s https://brave-browser-apt-release.s3.brave.com/brave-core.asc"
+                                empty
+  case gotBraveKey of
+    (ExitSuccess, stdOutText, stdErrText) -> 
   aptInstall "brave-browser"
              "brave-browser"
              "Brave web browser already installed at "
