@@ -1,0 +1,64 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 7437edb29350d372cbd9f3a372064b83b7c5e9337fae604d361f8912831469c2
+
+name:           pop-os-setup
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/pop-os-setup#readme>
+homepage:       https://github.com/josiah14/pop-os-setup#readme
+bug-reports:    https://github.com/josiah14/pop-os-setup/issues
+author:         Josiah Berkebile
+maintainer:     praenato14@gmail.com
+copyright:      2020 Cloyd Garrett 'Josiah' Berkebile
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/josiah14/pop-os-setup
+
+library
+  other-modules:
+      Paths_pop_os_setup
+  build-depends:
+      base >=4.7 && <5
+    , text
+    , turtle >=1.5.0 && <2
+  default-language: Haskell2010
+
+executable pop-os-setup-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_pop_os_setup
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , pop-os-setup
+    , text
+    , turtle >=1.5.0 && <2
+  default-language: Haskell2010
+
+test-suite pop-os-setup-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_pop_os_setup
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , pop-os-setup
+    , text
+    , turtle >=1.5.0 && <2
+  default-language: Haskell2010
