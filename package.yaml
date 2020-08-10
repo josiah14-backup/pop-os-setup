@@ -1,0 +1,50 @@
+name:                pop-os-setup
+version:             0.1.0.0
+github:              "josiah14/pop-os-setup"
+license:             BSD3
+author:              "Josiah Berkebile"
+maintainer:          "praenato14@gmail.com"
+copyright:           "2020 Cloyd Garrett 'Josiah' Berkebile"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/githubuser/pop-os-setup#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- text
+- turtle >= 1.5.0 && < 2
+
+library: {}
+#  source-dirs: src
+
+executables:
+  pop-os-setup-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - pop-os-setup
+
+tests:
+  pop-os-setup-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - pop-os-setup
