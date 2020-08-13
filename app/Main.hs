@@ -5,7 +5,7 @@ module Main where
 import Turtle
 import Turtle.Format (format, fp)
 import Turtle.Line (textToLine, textToLines)
-import Turtle.Shell
+import Turtle.Shell (Shell, sh)
 
 import qualified Data.Foldable as F (fold)
 import Control.Monad (sequence)
@@ -69,6 +69,68 @@ snapInstall channelName binName packageName foundPrefix foundErrText =
                          die ("ERROR: Could not install " <> packageName)
           Just loc -> echoWhichLocation loc foundPrefix foundErrText
 
+installBraveBrowser :: IO ()
+installBraveBrowser = do
+  -- Need to pipe some things together to get Brave to download correctly
+  -- https://brave-browser.readthedocs.io/en/latest/installing-brave.html#linux
+  braveInstalled <- which "brave-browser"
+  case braveInstalled of
+    Just braveLoc -> 
+      echoWhichLocation braveLoc
+                        "Brave Browser already install at "
+                        "Brave Browser already installed."
+    Nothing -> do
+      braveGpgKeyInstalled <- 
+        shellStrictWithErr "sudo apt-key --keyring \
+                          \ /etc/apt/trusted.gpg.d/brave-browser-release.gpg add -"
+        $ inshell "curl -s \
+                 \ https://brave-browser-apt-release.s3.brave.com/brave-core.asc"
+                  empty
+      case braveGpgKeyInstalled of
+        (ExitSuccess, stdOutText, stdErrText) -> do
+          braveAptSourcesListInstalled <-
+            shellStrictWithErr "sudo tee \
+                              \ /etc/apt/sources.list.d/brave-browser-release.list"
+            $ inshell "echo \"deb [arch=amd64] \
+                     \ https://brave-browser-apt-release.s3.brave.com/ \
+                     \ stable main\""
+                      empty
+          case braveAptSourcesListInstalled of
+            (ExitSuccess, stdOutText, stdErrText) ->
+              shell "sudo apt -y update" empty
+              >> aptInstall "brave-browser"
+                            "brave-browser"
+                            "Brave Browser already installed at "
+                            "Brave Browser already installed."
+            (ExitFailure _, stdOutText, stdErrText) ->
+              echoText (stdOutText <> stdErrText)
+              >> die "ERROR: Could not add Brave repository to apt sources.list."
+          echoText (stdOutText <> stdErrText)
+        (ExitFailure _, stdOutText, stdErrText) ->
+          echoText (stdOutText <> stdErrText)
+          >> die "ERROR: Could not add Brave ASC to apt trusted GPG Keys."
+
+installRustLang :: IO ()
+installRustLang = 
+  which "rustup"
+  >>= \rustupInstalled ->
+   case rustupInstalled of
+     Just rustupLoc ->
+       echoWhichLocation rustupLoc
+                         "Rustup already installed at "
+                         "Rustup already installed."
+     Nothing -> do
+       rustupInstallSuccessful <-
+         shellStrictWithErr "sh"
+         $ inshell "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs"
+                   empty
+       case rustupInstallSuccessful of
+         (ExitSuccess, stdOutText, stdErrText) -> 
+           echoText (stdOutText <> stdErrText) >> echo "Rustup Installed."
+         (ExitFailure _, stdOutText, stdErrText) ->
+           echoText (stdOutText <> stdErrText)
+           >> die "ERROR: Could not install Rustup"
+
 main :: IO ()
 main = do
   shell "sudo apt -y update" empty
@@ -88,19 +150,14 @@ main = do
              "vifm"
              "Vifm already installed at "
              "Vifm already installed."
-  -- The follewing tool always gets installed
+  aptInstall "sensors"
+             "lm-sensors"
+             "Hardware Sensors CLI program already installed at "
+             "Hardware Sensors CLI program already installed."
+  -- The following tool always gets installed
   aptInstall "apt-transport-https" "apt-transport-https" "" ""
   aptInstall "curl" "curl" "cURL already installed at " "cURL already installed."
-  -- Need to pipe some things together to get Brave to download correctly
-  -- https://brave-browser.readthedocs.io/en/latest/installing-brave.html#linux
-  gotBraveKey <- inshellWithErr "curl -s https://brave-browser-apt-release.s3.brave.com/brave-core.asc"
-                                empty
-  case gotBraveKey of
-    (ExitSuccess, stdOutText, stdErrText) -> 
-  aptInstall "brave-browser"
-             "brave-browser"
-             "Brave web browser already installed at "
-             "Brave web browser already installed."
+  installBraveBrowser
   aptInstall "stack"
              "haskell-stack"
              "Haskell Stack tool already installed at "
@@ -110,15 +167,18 @@ main = do
              "tmux"
              "Tmux already installed at "
              "Tmux already installed."
-  shell "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh" empty
+  installRustLang
   shell "source ~/.profile" empty
   aptInstall "python3"
              "python3"
              "Python 3.8 already installed at "
              "Python 3.8 already installed."
-  shell "sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1" empty
+  shell "sudo update-alternatives --install \
+       \ /usr/bin/python python /usr/bin/python3 1"
+        empty
   addFlathubRemoteExitCode <-
-    shell "flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo"
+    shell "flatpak remote-add --if-not-exists flathub \
+         \ https://dl.flathub.org/repo/flathub.flatpakrepo"
           empty
   case addFlathubRemoteExitCode of
     ExitSuccess -> 
