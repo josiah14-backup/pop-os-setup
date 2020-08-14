@@ -8,6 +8,22 @@ window-maximized=true
 window-position=(964, 557)
 window-size=(948, 467)
 
+[org/gnome/calculator]
+accuracy=9
+angle-units='degrees'
+base=10
+button-mode='basic'
+number-format='automatic'
+refresh-interval=604800
+show-thousands=false
+show-zeroes=false
+source-currency=''
+source-units='degree'
+target-currency=''
+target-units='radian'
+window-position=(3844, 8)
+word-size=64
+
 [org/gnome/control-center]
 last-panel='background'
 
@@ -50,7 +66,7 @@ enable-hot-corners=false
 gtk-im-module='gtk-im-context-simple'
 locate-pointer=true
 show-battery-percentage=true
-text-scaling-factor=0.89999999999999991
+text-scaling-factor=1.25
 toolkit-accessibility=false
 
 [org/gnome/desktop/notifications]
@@ -101,7 +117,8 @@ switch-windows-backward=['<Shift><Super>comma']
 toggle-fullscreen=['<Super>backslash']
 
 [org/gnome/desktop/wm/preferences]
-button-layout='appmenu:minimize,close'
+auto-raise=true
+button-layout='appmenu:close'
 focus-mode='sloppy'
 
 [org/gnome/evolution-data-server]
@@ -116,7 +133,7 @@ default-folder-viewer='icon-view'
 search-filter-time-type='last_modified'
 
 [org/gnome/nautilus/window-state]
-initial-size=(948, 468)
+initial-size=(1908, 2097)
 maximized=false
 sidebar-width=198
 
@@ -135,7 +152,11 @@ antialiasing='rgba'
 hinting='slight'
 
 [org/gnome/shell]
-enabled-extensions=['alt-tab-raise-first-window@system76.com', 'always-show-workspaces@system76.com', 'batteryiconfix@kylecorry31.github.io', 'desktop-icons@csoriano', 'pop-shell@system76.com', 'pop-shop-details@system76.com', 'system76-power@system76.com', 'ubuntu-appindicators@ubuntu.com', 'gtktitlebar@velitasali.github.io', 'no-title-bar@jonaspoehler.de']
+disable-user-extensions=false
+enabled-extensions=['alt-tab-raise-first-window@system76.com', 'always-show-workspaces@system76.com', 'batteryiconfix@kylecorry31.github.io', 'desktop-icons@csoriano', 'pop-shell@system76.com', 'pop-shop-details@system76.com', 'system76-power@system76.com', 'ubuntu-appindicators@ubuntu.com', 'undecorate@sun.wxg@gmail.com', 'no-title-bar@jonaspoehler.de', 'pixel-saver@deadalnix.me', 'hidetopbar@mathieu.bidon.ca', 'gtktitlebar@velitasali.github.io', 'unite@hardpixel.eu', 'window-title-in-topbar@fthx']
+
+[org/gnome/shell/extensions/hidetopbar]
+mouse-sensitive=true
 
 [org/gnome/shell/extensions/no-title-bar]
 buttons-for-all-win=false
