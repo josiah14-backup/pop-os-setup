@@ -154,6 +154,10 @@ main = do
              "lm-sensors"
              "Hardware Sensors CLI program already installed at "
              "Hardware Sensors CLI program already installed."
+  aptInstall "gnome-tweaks"
+             "gnome-tweaks"
+             "Gnome Tweaks already installed at "
+             "Gnome Tweaks already installed."
   -- The following tool always gets installed
   aptInstall "apt-transport-https" "apt-transport-https" "" ""
   aptInstall "curl" "curl" "cURL already installed at " "cURL already installed."
