@@ -3,10 +3,10 @@ preload-engines=['xkb:us:dvorak:eng']
 version='1.5.22'
 
 [io/elementary/appcenter/settings]
-last-refresh-time=int64 1597360751
-window-maximized=true
-window-position=(964, 557)
-window-size=(948, 467)
+last-refresh-time=int64 1597417964
+window-maximized=false
+window-position=(8, 8)
+window-size=(948, 481)
 
 [org/gnome/calculator]
 accuracy=9
@@ -25,7 +25,7 @@ window-position=(3844, 8)
 word-size=64
 
 [org/gnome/control-center]
-last-panel='background'
+last-panel='sound'
 
 [org/gnome/desktop/a11y/magnifier]
 mag-factor=5.0
@@ -57,7 +57,7 @@ show-weekdate=true
 
 [org/gnome/desktop/input-sources]
 sources=[('xkb', 'us+dvorak')]
-xkb-options=['caps:swapescape']
+xkb-options=['caps:swapescape', 'altwin:menu_win']
 
 [org/gnome/desktop/interface]
 clock-show-seconds=true
@@ -66,11 +66,16 @@ enable-hot-corners=false
 gtk-im-module='gtk-im-context-simple'
 locate-pointer=true
 show-battery-percentage=true
-text-scaling-factor=1.25
 toolkit-accessibility=false
 
 [org/gnome/desktop/notifications]
-application-children=['io-elementary-appcenter', 'org-gnome-nautilus', 'org-gnome-tweaks']
+application-children=['io-elementary-appcenter', 'org-gnome-nautilus', 'org-gnome-tweaks', 'brave-browser', 'us-zoom-zoom', 'emacs-emacs', 'org-gnome-terminal']
+
+[org/gnome/desktop/notifications/application/brave-browser]
+application-id='brave-browser.desktop'
+
+[org/gnome/desktop/notifications/application/emacs-emacs]
+application-id='emacs_emacs.desktop'
 
 [org/gnome/desktop/notifications/application/io-elementary-appcenter]
 application-id='io.elementary.appcenter.desktop'
@@ -78,8 +83,14 @@ application-id='io.elementary.appcenter.desktop'
 [org/gnome/desktop/notifications/application/org-gnome-nautilus]
 application-id='org.gnome.Nautilus.desktop'
 
+[org/gnome/desktop/notifications/application/org-gnome-terminal]
+application-id='org.gnome.Terminal.desktop'
+
 [org/gnome/desktop/notifications/application/org-gnome-tweaks]
 application-id='org.gnome.tweaks.desktop'
+
+[org/gnome/desktop/notifications/application/us-zoom-zoom]
+application-id='us.zoom.Zoom.desktop'
 
 [org/gnome/desktop/privacy]
 disable-microphone=false
@@ -153,7 +164,14 @@ hinting='slight'
 
 [org/gnome/shell]
 disable-user-extensions=false
-enabled-extensions=['alt-tab-raise-first-window@system76.com', 'always-show-workspaces@system76.com', 'batteryiconfix@kylecorry31.github.io', 'desktop-icons@csoriano', 'pop-shell@system76.com', 'pop-shop-details@system76.com', 'system76-power@system76.com', 'ubuntu-appindicators@ubuntu.com', 'undecorate@sun.wxg@gmail.com', 'no-title-bar@jonaspoehler.de', 'pixel-saver@deadalnix.me', 'hidetopbar@mathieu.bidon.ca', 'gtktitlebar@velitasali.github.io', 'unite@hardpixel.eu', 'window-title-in-topbar@fthx']
+enabled-extensions=['alt-tab-raise-first-window@system76.com', 'always-show-workspaces@system76.com', 'batteryiconfix@kylecorry31.github.io', 'desktop-icons@csoriano', 'pop-shell@system76.com', 'pop-shop-details@system76.com', 'system76-power@system76.com', 'ubuntu-appindicators@ubuntu.com', 'undecorate@sun.wxg@gmail.com', 'no-title-bar@jonaspoehler.de', 'pixel-saver@deadalnix.me', 'hidetopbar@mathieu.bidon.ca', 'gtktitlebar@velitasali.github.io', 'unite@hardpixel.eu', 'window-title-in-topbar@fthx', 'freon@UshakovVasilii_Github.yahoo.com']
+
+[org/gnome/shell/extensions/freon]
+drive-utility='nvmecli'
+gpu-utility='bumblebee-nvidia-smi'
+group-temperature=true
+panel-box-index=0
+position-in-panel='center'
 
 [org/gnome/shell/extensions/hidetopbar]
 mouse-sensitive=true

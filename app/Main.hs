@@ -154,6 +154,10 @@ main = do
              "lm-sensors"
              "Hardware Sensors CLI program already installed at "
              "Hardware Sensors CLI program already installed."
+  aptInstall "xdotool"
+             "xdotool"
+             "xdotool already installed at "
+             "xdotool already installed."
   aptInstall "gnome-tweaks"
              "gnome-tweaks"
              "Gnome Tweaks already installed at "
@@ -171,8 +175,25 @@ main = do
              "tmux"
              "Tmux already installed at "
              "Tmux already installed."
+  aptInstall "zsh" "zsh" "ZSH already installed at " "ZSH already installed."
+  fmap (flip (</>) ".oh-my-zsh") home >>= testpath >>= (
+    \ohmyzshInstalled -> case ohmyzshInstalled of
+      True -> echo "Oh My Zsh already installed."
+      False ->
+        shell "sh -c \"$(\
+                \curl -fsSL \
+                \https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh\
+              \)\""
+              empty
+        >>= (\ohmyzshInstallExitStatus ->
+          case ohmyzshInstallExitStatus of
+            ExitSuccess ->
+              shell "sudo usermod --shell $(which zsh) josiah" empty
+              >> echo "Oh My Zsh Install Successful"
+            ExitFailure _ -> echo "Oh My Zsh Install Failed."
+        )
+    )
   installRustLang
-  shell "source ~/.profile" empty
   aptInstall "python3"
              "python3"
              "Python 3.8 already installed at "
@@ -190,10 +211,17 @@ main = do
       >> flatpakInstall "com.slack.Slack"
       >> flatpakInstall "im.riot.Riot"
       >> flatpakInstall "com.microsoft.Teams"
+      >> flatpakInstall "com.spotify.Client"
+      >> flatpakInstall "us.zoom.Zoom"
     ExitFailure exitCode -> die "Could not add the remote 'flathub'."
   snapInstall "stable"
               "emacs"
               "--classic emacs"
               "Emacs already installed at "
               "Emacs already installed."
+  snapInstall "edge"
+              "thefuck"
+              "--classic thefuck"
+              "thefuck already installed at "
+              "thefuck already installed."
   echo "DONE"
