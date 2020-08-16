@@ -1,9 +1,0 @@
-[legacy]
-default-show-menubar=false
-headerbar=@mb false
-
-[legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9]
-background-color='rgb(0,43,54)'
-font='Fira Mono Medium 14'
-foreground-color='rgb(131,148,150)'
-scrollback-lines=100000

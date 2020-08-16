@@ -2,6 +2,10 @@
 -- installation script is implemented.  Please install Miniconda
 -- manually before running this script.
 -- https://docs.conda.io/en/latest/miniconda.html#linux-installers
+--
+-- This installation also does not currently handle system theming
+-- as I regard it as non-essential to the system and a rather complex
+-- process to take the time to script-up.
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where
@@ -158,7 +162,6 @@ installOhMyZsh =
 installOhMyZshPlugins :: IO ()
 installOhMyZshPlugins = do
   zshCustomPluginsDir <- fmap (flip (</>) ".oh-my-zsh/custom/plugins") home
-
   zshAutosuggestionsInstalled <- testpath (
     zshCustomPluginsDir </> "zsh-autosuggestions"
     )
@@ -168,7 +171,6 @@ installOhMyZshPlugins = do
             \ ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
              empty
     True -> echo "Zsh-Autosuggestions already installed"
-
   zshSyntaxHighlightingInstalled <- testpath (
     zshCustomPluginsDir </> "zsh-syntax-highlighting"
     )
@@ -178,7 +180,6 @@ installOhMyZshPlugins = do
             \ ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
              empty
     True -> echo "Zsh-Syntax-Highlighting already installed."
-
   nixZshCompletionsInstalled <- testpath (
     zshCustomPluginsDir </> "nix-zsh-completions"
     )
@@ -199,9 +200,25 @@ copyDotFilesToHome = do
   cp (curdir </> ".gitconfig") (homedir </> ".gitconfig")
   cptree (curdir </> ".xmonad") (homedir </> ".xmonad")
 
+installPowerline :: IO ()
+installPowerline = shellStrictWithErr "pip show powerline-status" empty
+  >>= \powerlineInstalled -> case powerlineInstalled of
+    (ExitSuccess, stdOutText, stdErrText) ->
+      echoText (stdOutText <> stdErrText) >> echo "Powerline already installed."
+    (ExitFailure _, stdOutText, stdErrText) ->
+      echoText (stdOutText <> stdErrText)
+      >> shells "pip install powerline-status" empty
+      >> shells "git clone https://github.com/powerline/fonts.git" empty
+      >> cd "fonts" >> shells "sh ./install.sh" empty
+      >> cd ".." >> rmtree "fonts"
+
 main :: IO ()
 main = do
   shell "sudo apt -y update" empty
+  aptInstall "xclip"
+             "xclip"
+             "xclip already installed at "
+             "xclip already installed."
   aptInstall "snap"
              "snapd"
              "Snappy already installed at "
@@ -254,6 +271,7 @@ main = do
        \ /usr/bin/python python /usr/bin/python3 1"
         empty
   installOhMyZshPlugins
+  installPowerline
   copyDotFilesToHome
   shells "dconf load / < gnome-settings.dconf" empty
   addFlathubRemoteExitCode <-
