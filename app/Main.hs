@@ -212,9 +212,72 @@ installPowerline = shellStrictWithErr "pip show powerline-status" empty
       >> cd "fonts" >> shells "sh ./install.sh" empty
       >> cd ".." >> rmtree "fonts"
 
+installDocker :: IO ()
+installDocker = do
+  dockerInstalled <- which "docker"
+  case dockerInstalled of
+    Just dockerLoc -> echoWhichLocation dockerLoc
+                                        "Docker already installed at "
+                                        "Docker already installed."
+    Nothing -> (
+      shells "sudo apt-key add -"
+      $ inshell "curl -fsSL https://download.docker.com/linux/ubuntu/gpg" empty
+      ) >> shells "sudo apt-add-repository \
+               \ \"deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+               \ $(lsb_release -cs) \
+               \ stable\""
+                empty
+      >> shells "sudo apt -y update" empty
+      >> shells "sudo apt install -y docker-ce docker-ce-cli containerd.io \
+                \docker-compose" empty
+
+installKompose :: IO ()
+installKompose = which "kompose" >>= \komposeInstalled ->
+  case komposeInstalled of
+    Just komposeLoc -> echoWhichLocation komposeLoc
+                                         "Kompose already installed at "
+                                         "Kompose already installed."
+    Nothing ->
+      shells "curl -L https://github.com/kubernetes/kompose/releases/download/v1.21.0/kompose-linux-amd64 -o kompose"
+             empty
+      >> chmod executable "./kompose"
+      >> shells "sudo mv ./kompose /usr/local/bin/kompose" empty
+
+installKinD :: IO ()
+installKinD = which "kind" >>= \kindInstalled ->
+  case kindInstalled of
+    Just kindLoc -> echoWhichLocation kindLoc
+                                      "KinD already installed at "
+                                      "KinD already installed."
+    Nothing ->
+      shells "curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.8.1/kind-linux-amd64"
+             empty
+      >> chmod executable "./kind"
+      >> shells "sudo mv ./kind /usr/local/bin/kind" empty
+
+installTerraform :: IO ()
+installTerraform = which "terraform" >>= \terraformInstalled ->
+  case terraformInstalled of
+    Just terraformLoc -> echoWhichLocation terraformLoc
+                                           "Terraform already installed at "
+                                           "Terrafrom already installed."
+    Nothing ->
+      (shells "sudo apt-key add -"
+       $ inshell "curl -fsSL https://apt.releases.hashicorp.com/gpg" empty)
+      >> shells "sudo apt-add-repository \
+               \ \"deb [arch=amd64] https://apt.releases.hashicorp.com \
+               \ $(lsb_release -cs) main\""
+                empty
+      >> shells "sudo apt -y update" empty
+      >> shells "sudo apt install -y terraform" empty
+
 main :: IO ()
 main = do
   shell "sudo apt -y update" empty
+  aptInstall "curl" "curl" "cURL already installed at " "cURL already installed."
+  shells "sudo apt install -y apt-transport-https ca-certificates gnupg-agent \
+         \software-properties-common"
+         empty
   aptInstall "xclip"
              "xclip"
              "xclip already installed at "
@@ -248,8 +311,6 @@ main = do
              "Gnome Tweaks already installed at "
              "Gnome Tweaks already installed."
   -- The following tool always gets installed
-  aptInstall "apt-transport-https" "apt-transport-https" "" ""
-  aptInstall "curl" "curl" "cURL already installed at " "cURL already installed."
   installBraveBrowser
   aptInstall "stack"
              "haskell-stack"
@@ -262,7 +323,13 @@ main = do
              "Tmux already installed."
   aptInstall "zsh" "zsh" "ZSH already installed at " "ZSH already installed."
   installOhMyZsh
+  aptInstall "jq" "jq" "jq already installed at " "jq already installed."
   installRustLang
+  aptInstall "go"
+             "golang"
+             "Go already installed at "
+             "Go already installed."
+  aptInstall "npm" "npm" "NPM already installed at " "NPM already installed."
   aptInstall "python3"
              "python3"
              "Python 3.8 already installed at "
@@ -273,6 +340,30 @@ main = do
   installOhMyZshPlugins
   installPowerline
   copyDotFilesToHome
+  nixInstalled <- which "nix-shell"
+  case nixInstalled of
+    Just nixShellLoc -> echoWhichLocation nixShellLoc
+                                          "nix-shell found at "
+                                          "nix-shell found."
+    Nothing -> shells "sh" $ inshell "curl -L https://nixos.org/nix/install"
+                                     empty
+  installDocker
+  aptInstall "az"
+             "azure-cli"
+             "Azure CLI already installed at "
+             "Azure CLI already installed."
+  aptInstall "kubectl"
+             "kubernetes"
+             "K8S already installed at "
+             "K8S already installed."
+  installKompose
+  snapInstall "stable"
+              "helm"
+              "--classic helm"
+              "K8S Helm already installed at "
+              "K8S Helm already installed."
+  installKinD
+  installTerraform
   shells "dconf load / < gnome-settings.dconf" empty
   addFlathubRemoteExitCode <-
     shell "flatpak remote-add --if-not-exists flathub \

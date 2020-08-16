@@ -69,7 +69,6 @@ gtk-theme='Solarized-Dark-Orange-3.36'
 icon-theme='Humanity-Dark'
 locate-pointer=true
 show-battery-percentage=true
-text-scaling-factor=0.75
 toolkit-accessibility=false
 
 [org/gnome/desktop/notifications]
@@ -95,6 +94,9 @@ application-id='org.gnome.tweaks.desktop'
 
 [org/gnome/desktop/notifications/application/us-zoom-zoom]
 application-id='us.zoom.Zoom.desktop'
+
+[org/gnome/desktop/peripherals/mouse]
+accel-profile='adaptive'
 
 [org/gnome/desktop/privacy]
 disable-microphone=false
