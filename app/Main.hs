@@ -385,6 +385,7 @@ main = do
       >> flatpakInstall "com.microsoft.Teams"
       >> flatpakInstall "com.spotify.Client"
       >> flatpakInstall "us.zoom.Zoom"
+      >> flatpakInstall "com.valvesoftware.Steam"
     ExitFailure exitCode -> die "Could not add the remote 'flathub'."
   snapInstall "stable"
               "emacs"
