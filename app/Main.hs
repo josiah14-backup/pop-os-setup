@@ -324,6 +324,14 @@ main = do
   aptInstall "zsh" "zsh" "ZSH already installed at " "ZSH already installed."
   installOhMyZsh
   aptInstall "jq" "jq" "jq already installed at " "jq already installed."
+  aptInstall "ag"
+             "silversearcher-ag"
+             "Silver Searcher already installed at "
+             "Silver Searcher already installed."
+  aptInstall "rg"
+             "ripgrep"
+             "Ripgrep already installed at "
+             "Ripgrep already installed."
   installRustLang
   aptInstall "go"
              "golang"
