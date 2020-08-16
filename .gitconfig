@@ -1,0 +1,9 @@
+[user]
+	email = praenato14@gmail.com
+	name = Josiah Berkebile
+[core]
+	editor = /usr/bin/vim
+[push]
+	default = current
+[pull]
+	default = current

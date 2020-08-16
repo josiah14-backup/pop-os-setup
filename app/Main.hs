@@ -1,3 +1,7 @@
+-- The Miniconda3 is not able to be automated due to the way the
+-- installation script is implemented.  Please install Miniconda
+-- manually before running this script.
+-- https://docs.conda.io/en/latest/miniconda.html#linux-installers
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where
@@ -29,7 +33,7 @@ aptInstall binName packageName foundPrefix foundErrText =
           Nothing -> shell ("sudo apt install -y " <> packageName) empty
             >>= \installStatus ->
                   case installStatus of
-                    ExitSuccess -> echo ""
+                    ExitSuccess -> return ()
                     ExitFailure _ ->
                       die ("ERROR: Could not install "
                            <> (pack $ encodeString binName))
@@ -64,7 +68,7 @@ snapInstall channelName binName packageName foundPrefix foundErrText =
             in shell cmd empty
                >>= \installStatus ->
                      case installStatus of
-                       ExitSuccess -> echo ""
+                       ExitSuccess -> return ()
                        ExitFailure _ ->
                          die ("ERROR: Could not install " <> packageName)
           Just loc -> echoWhichLocation loc foundPrefix foundErrText
@@ -97,7 +101,7 @@ installBraveBrowser = do
                       empty
           case braveAptSourcesListInstalled of
             (ExitSuccess, stdOutText, stdErrText) ->
-              shell "sudo apt -y update" empty
+              shells "sudo apt -y update" empty
               >> aptInstall "brave-browser"
                             "brave-browser"
                             "Brave Browser already installed at "
@@ -130,6 +134,70 @@ installRustLang =
          (ExitFailure _, stdOutText, stdErrText) ->
            echoText (stdOutText <> stdErrText)
            >> die "ERROR: Could not install Rustup"
+
+installOhMyZsh :: IO ()
+installOhMyZsh =
+  fmap (flip (</>) ".oh-my-zsh") home >>= testpath >>= (
+    \ohmyzshInstalled -> case ohmyzshInstalled of
+      True -> echo "Oh My Zsh already installed."
+      False ->
+        shell "sh -c \"$(\
+                \curl -fsSL \
+                \https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh\
+              \)\""
+              empty
+        >>= (\ohmyzshInstallExitStatus ->
+          case ohmyzshInstallExitStatus of
+            ExitSuccess ->
+              shell "sudo usermod --shell $(which zsh) josiah" empty
+              >> echo "Oh My Zsh Install Successful"
+            ExitFailure _ -> echo "Oh My Zsh Install Failed."
+        )
+    )
+
+installOhMyZshPlugins :: IO ()
+installOhMyZshPlugins = do
+  zshCustomPluginsDir <- fmap (flip (</>) ".oh-my-zsh/custom/plugins") home
+
+  zshAutosuggestionsInstalled <- testpath (
+    zshCustomPluginsDir </> "zsh-autosuggestions"
+    )
+  case zshAutosuggestionsInstalled of
+    False ->
+      shells "git clone https://github.com/zsh-users/zsh-autosuggestions \
+            \ ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+             empty
+    True -> echo "Zsh-Autosuggestions already installed"
+
+  zshSyntaxHighlightingInstalled <- testpath (
+    zshCustomPluginsDir </> "zsh-syntax-highlighting"
+    )
+  case zshSyntaxHighlightingInstalled of
+    False ->
+      shells "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
+            \ ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+             empty
+    True -> echo "Zsh-Syntax-Highlighting already installed."
+
+  nixZshCompletionsInstalled <- testpath (
+    zshCustomPluginsDir </> "nix-zsh-completions"
+    )
+  case nixZshCompletionsInstalled of
+    False ->
+      shells "git clone git@github.com:spwhitt/nix-zsh-completions.git \
+            \ ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/nix-zsh-completions"
+             empty
+    True -> echo "Nix-Zsh-Completions already installed."
+
+copyDotFilesToHome :: IO ()
+copyDotFilesToHome = do
+  homedir <- home
+  curdir <- pwd
+  cp (curdir </> ".bashrc") (homedir </> ".bashrc")
+  cp (curdir </> ".zshrc") (homedir </> ".zshrc")
+  cp (curdir </> ".tmux.conf") (homedir </> ".tmux.conf")
+  cp (curdir </> ".gitconfig") (homedir </> ".gitconfig")
+  cptree (curdir </> ".xmonad") (homedir </> ".xmonad")
 
 main :: IO ()
 main = do
@@ -176,23 +244,7 @@ main = do
              "Tmux already installed at "
              "Tmux already installed."
   aptInstall "zsh" "zsh" "ZSH already installed at " "ZSH already installed."
-  fmap (flip (</>) ".oh-my-zsh") home >>= testpath >>= (
-    \ohmyzshInstalled -> case ohmyzshInstalled of
-      True -> echo "Oh My Zsh already installed."
-      False ->
-        shell "sh -c \"$(\
-                \curl -fsSL \
-                \https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh\
-              \)\""
-              empty
-        >>= (\ohmyzshInstallExitStatus ->
-          case ohmyzshInstallExitStatus of
-            ExitSuccess ->
-              shell "sudo usermod --shell $(which zsh) josiah" empty
-              >> echo "Oh My Zsh Install Successful"
-            ExitFailure _ -> echo "Oh My Zsh Install Failed."
-        )
-    )
+  installOhMyZsh
   installRustLang
   aptInstall "python3"
              "python3"
@@ -201,6 +253,9 @@ main = do
   shell "sudo update-alternatives --install \
        \ /usr/bin/python python /usr/bin/python3 1"
         empty
+  installOhMyZshPlugins
+  copyDotFilesToHome
+  shells "dconf load / < gnome-settings.dconf" empty
   addFlathubRemoteExitCode <-
     shell "flatpak remote-add --if-not-exists flathub \
          \ https://dl.flathub.org/repo/flathub.flatpakrepo"
