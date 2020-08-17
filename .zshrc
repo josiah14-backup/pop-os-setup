@@ -114,3 +114,4 @@ alias ipyvi="ipython --TerminalInteractiveShell.editing_mode=vi"
 
 export PATH="/home/josiah/.nix-profile/bin:/home/josiah/.nix-profile/sbin:/home/josiah/.cabal/bin:$PATH"
 eval $(thefuck --alias)
+source <(kompose completion zsh)

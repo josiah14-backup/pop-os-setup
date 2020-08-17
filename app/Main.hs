@@ -271,12 +271,27 @@ installTerraform = which "terraform" >>= \terraformInstalled ->
       >> shells "sudo apt -y update" empty
       >> shells "sudo apt install -y terraform" empty
 
+installHaskellIDEEngine :: IO ()
+installHaskellIDEEngine = which "hie" >>= \hieInstalled ->
+  case hieInstalled of
+    Just hieLoc -> echoWhichLocation hieLoc
+                                     "Haskell IDE Engine already installed at "
+                                     "Haskell IDE Engine already installed."
+    Nothing ->
+      shells "git clone https://github.com/haskell/haskell-ide-engine \
+             \--recurse-submodules"
+             empty
+      >> cd "haskell-ide-engine" >> shells "stack ./install.hs hie" empty
+      >> cd ".." >> rmtree "haskell-ide-engine"
+
 main :: IO ()
 main = do
   shell "sudo apt -y update" empty
   aptInstall "curl" "curl" "cURL already installed at " "cURL already installed."
   shells "sudo apt install -y apt-transport-https ca-certificates gnupg-agent \
-         \software-properties-common"
+         \software-properties-common libgtk-3-dev libicu-dev libncurses-dev \
+         \libgmp-dev zlib1g-dev libtinfo-dev libc6-dev libffi-dev g++ gcc make \
+         \xz-utils gnupg"
          empty
   aptInstall "xclip"
              "xclip"
@@ -294,6 +309,10 @@ main = do
              "vim"
              "Vim already installed at "
              "Vim already installed."
+  aptInstall "gvim"
+             "vim-gtk3"
+             "GVim already installed at "
+             "GVim already installed."
   aptInstall "vifm"
              "vifm"
              "Vifm already installed at "
@@ -310,12 +329,12 @@ main = do
              "gnome-tweaks"
              "Gnome Tweaks already installed at "
              "Gnome Tweaks already installed."
-  -- The following tool always gets installed
   installBraveBrowser
   aptInstall "stack"
              "haskell-stack"
              "Haskell Stack tool already installed at "
              "Haskell Stack tool already installed."
+  installHaskellIDEEngine
   shell "stack upgrade --binary-only" empty
   aptInstall "tmux"
              "tmux"
