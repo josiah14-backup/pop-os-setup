@@ -271,6 +271,42 @@ installTerraform = which "terraform" >>= \terraformInstalled ->
       >> shells "sudo apt -y update" empty
       >> shells "sudo apt install -y terraform" empty
 
+installKubectl :: IO ()
+installKubectl = which "kubectl" >>= \kubectlInstalled ->
+  case kubectlInstalled of
+    Just kubectlLoc -> echoWhichLocation kubectlLoc
+                                         "kubectl already installed at "
+                                         "kubectl already installed."
+    Nothing -> 
+      shells "curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg \
+             \| sudo apt-key add -"
+             empty
+      >> (shells "sudo tee -a /etc/apt/sources.list.d/kubernetes.list"
+                 $ inshell "echo \"deb https://apt.kubernetes.io/ \
+                           \kubernetes-xenial main\""
+                           empty)
+      >> shells "sudo apt -y update" empty
+      >> shells "sudo apt install -y kubectl" empty
+
+prepareAzureCliInstall :: IO ()
+prepareAzureCliInstall = which "az" >>= \azInstalled ->
+  case azInstalled of
+    Just azLoc -> echoWhichLocation azLoc
+                                    "Azure CLI already installed at "
+                                    "Azure CLI already installed."
+    Nothing ->
+      shells "curl -sL https://packages.microsoft.com/keys/microsoft.asc \
+            \ | gpg --dearmor \
+            \ | sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null"
+              empty
+      >> (shells "sudo tee /etc/apt/sources.list.d/azure-cli.list"
+                $ inshell "echo \"deb [arch=amd64] \
+                         \ https://packages.microsoft.com/repos/azure-cli/ \
+                         \ $(lsb_release -cs) main\""
+                          empty)
+      >> shells "sudo apt update -y" empty
+      >> shells "sudo apt install -y azure-cli" empty
+
 installHaskellIDEEngine :: IO ()
 installHaskellIDEEngine = which "hie" >>= \hieInstalled ->
   case hieInstalled of
@@ -284,6 +320,20 @@ installHaskellIDEEngine = which "hie" >>= \hieInstalled ->
       >> cd "haskell-ide-engine" >> shells "stack ./install.hs hie" empty
       >> cd ".." >> rmtree "haskell-ide-engine"
 
+installPythonPoetry :: IO ()
+installPythonPoetry = which "poetry" >>= \poetryInstalled ->
+  case poetryInstalled of
+    Just poetryLoc ->
+      echoWhichLocation poetryLoc
+                        "Poetry package manager for Python already installed at "
+                        "Poetry package manager for Python already installed."
+    Nothing ->
+      (shells "python3"
+             $ inshell "curl -sSL \
+                       \https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py"
+                       empty)
+      >> shells "echo 'export PATH=\"${HOME}/.poetry/bin:${PATH}\"' >> ~/.zprofile" empty
+
 main :: IO ()
 main = do
   shell "sudo apt -y update" empty
@@ -291,7 +341,7 @@ main = do
   shells "sudo apt install -y apt-transport-https ca-certificates gnupg-agent \
          \software-properties-common libgtk-3-dev libicu-dev libncurses-dev \
          \libgmp-dev zlib1g-dev libtinfo-dev libc6-dev libffi-dev g++ gcc make \
-         \xz-utils gnupg"
+         \xz-utils gnupg gnupg2 libbz2-dev"
          empty
   aptInstall "xclip"
              "xclip"
@@ -313,6 +363,10 @@ main = do
              "vim-gtk3"
              "GVim already installed at "
              "GVim already installed."
+  aptInstall "lpass"
+             "lastpass-cli"
+             "LastPass CLI client already installed at "
+             "LastPass CLI client already installed."
   aptInstall "vifm"
              "vifm"
              "Vifm already installed at "
@@ -364,6 +418,7 @@ main = do
   shell "sudo update-alternatives --install \
        \ /usr/bin/python python /usr/bin/python3 1"
         empty
+  installPythonPoetry
   installOhMyZshPlugins
   installPowerline
   copyDotFilesToHome
@@ -375,14 +430,16 @@ main = do
     Nothing -> shells "sh" $ inshell "curl -L https://nixos.org/nix/install"
                                      empty
   installDocker
+  prepareAzureCliInstall
   aptInstall "az"
              "azure-cli"
              "Azure CLI already installed at "
              "Azure CLI already installed."
-  aptInstall "kubectl"
+  aptInstall "kubernetes"
              "kubernetes"
              "K8S already installed at "
              "K8S already installed."
+  installKubectl
   installKompose
   snapInstall "stable"
               "helm"
@@ -406,7 +463,7 @@ main = do
       >> flatpakInstall "us.zoom.Zoom"
       >> flatpakInstall "com.valvesoftware.Steam"
     ExitFailure exitCode -> die "Could not add the remote 'flathub'."
-  snapInstall "stable"
+  snapInstall "edge"
               "emacs"
               "--classic emacs"
               "Emacs already installed at "

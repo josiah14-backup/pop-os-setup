@@ -125,3 +125,4 @@ fi
 
 eval $(thefuck --alias)
 source <(kompose completion bash)
+alias fd=fdfind

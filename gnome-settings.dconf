@@ -3,10 +3,13 @@ preload-engines=['xkb:us:dvorak:eng']
 version='1.5.22'
 
 [io/elementary/appcenter/settings]
-last-refresh-time=int64 1597417964
+last-refresh-time=int64 1598388882
 window-maximized=false
-window-position=(8, 8)
-window-size=(948, 481)
+window-position=(4, 537)
+window-size=(954, 1026)
+
+[org/gnome/Weather]
+locations=[<(uint32 2, <('Kansas City', 'KMKC', true, [(0.68278734197285074, -1.6510281351246947)], [(0.68267106813808298, -1.651560687439356)])>)>, <(uint32 2, <('Kansas City', 'KMKC', true, [(0.68278734197285074, -1.6510281351246947)], [(0.68241897278092489, -1.650707395968056)])>)>]
 
 [org/gnome/calculator]
 accuracy=9
@@ -25,7 +28,7 @@ window-position=(3844, 8)
 word-size=64
 
 [org/gnome/control-center]
-last-panel='sound'
+last-panel='display'
 
 [org/gnome/desktop/a11y/magnifier]
 mag-factor=5.0
@@ -69,19 +72,35 @@ gtk-theme='Solarized-Dark-Orange-3.36'
 icon-theme='Humanity-Dark'
 locate-pointer=true
 show-battery-percentage=true
+text-scaling-factor=1.25
 toolkit-accessibility=false
 
 [org/gnome/desktop/notifications]
-application-children=['io-elementary-appcenter', 'org-gnome-nautilus', 'org-gnome-tweaks', 'brave-browser', 'us-zoom-zoom', 'emacs-emacs', 'org-gnome-terminal']
+application-children=['io-elementary-appcenter', 'org-gnome-nautilus', 'org-gnome-tweaks', 'brave-browser', 'us-zoom-zoom', 'emacs-emacs', 'org-gnome-terminal', 'com-microsoft-teams', 'gnome-network-panel', 'org-gnome-extensions-desktop', 'org-gnome-chromegnomeshell', 'firefox', 'org-signal-signal']
 
 [org/gnome/desktop/notifications/application/brave-browser]
 application-id='brave-browser.desktop'
 
+[org/gnome/desktop/notifications/application/com-microsoft-teams]
+application-id='com.microsoft.Teams.desktop'
+
 [org/gnome/desktop/notifications/application/emacs-emacs]
 application-id='emacs_emacs.desktop'
 
+[org/gnome/desktop/notifications/application/firefox]
+application-id='firefox.desktop'
+
+[org/gnome/desktop/notifications/application/gnome-network-panel]
+application-id='gnome-network-panel.desktop'
+
 [org/gnome/desktop/notifications/application/io-elementary-appcenter]
 application-id='io.elementary.appcenter.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-chromegnomeshell]
+application-id='org.gnome.ChromeGnomeShell.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-extensions-desktop]
+application-id='org.gnome.Extensions.desktop.desktop'
 
 [org/gnome/desktop/notifications/application/org-gnome-nautilus]
 application-id='org.gnome.Nautilus.desktop'
@@ -92,11 +111,17 @@ application-id='org.gnome.Terminal.desktop'
 [org/gnome/desktop/notifications/application/org-gnome-tweaks]
 application-id='org.gnome.tweaks.desktop'
 
+[org/gnome/desktop/notifications/application/org-signal-signal]
+application-id='org.signal.Signal.desktop'
+
 [org/gnome/desktop/notifications/application/us-zoom-zoom]
 application-id='us.zoom.Zoom.desktop'
 
 [org/gnome/desktop/peripherals/mouse]
 accel-profile='adaptive'
+
+[org/gnome/desktop/peripherals/touchpad]
+send-events='enabled'
 
 [org/gnome/desktop/privacy]
 disable-microphone=false
@@ -154,6 +179,19 @@ sidebar-width=200
 window-height=485
 window-width=534
 
+[org/gnome/gedit/plugins]
+active-plugins=['time', 'modelines', 'filebrowser', 'docinfo', 'spell']
+
+[org/gnome/gedit/preferences/ui]
+show-tabs-mode='auto'
+
+[org/gnome/gedit/state/window]
+bottom-panel-size=140
+side-panel-active-page='GeditWindowDocumentsPanel'
+side-panel-size=200
+size=(1914, 2076)
+state=87040
+
 [org/gnome/mutter]
 overlay-key='Super_L'
 
@@ -166,7 +204,7 @@ search-filter-time-type='last_modified'
 search-view='list-view'
 
 [org/gnome/nautilus/window-state]
-initial-size=(1908, 2097)
+initial-size=(1914, 2106)
 maximized=false
 sidebar-width=198
 
@@ -186,12 +224,13 @@ hinting='slight'
 
 [org/gnome/shell]
 disable-user-extensions=false
-enabled-extensions=['alt-tab-raise-first-window@system76.com', 'always-show-workspaces@system76.com', 'batteryiconfix@kylecorry31.github.io', 'desktop-icons@csoriano', 'pop-shell@system76.com', 'pop-shop-details@system76.com', 'system76-power@system76.com', 'ubuntu-appindicators@ubuntu.com', 'undecorate@sun.wxg@gmail.com', 'no-title-bar@jonaspoehler.de', 'pixel-saver@deadalnix.me', 'hidetopbar@mathieu.bidon.ca', 'gtktitlebar@velitasali.github.io', 'unite@hardpixel.eu', 'window-title-in-topbar@fthx', 'freon@UshakovVasilii_Github.yahoo.com', 'Always-Show-Titles-In-Overview@gmail.com', 'cpupower@mko-sl.de', 'update-extensions@franglais125.gmail.com', 'user-theme@gnome-shell-extensions.gcampax.github.com']
+disabled-extensions=['hidetopbar@mathieu.bidon.ca', 'Always-Show-Titles-In-Overview@gmail.com', 'gtktitlebar@velitasali.github.io']
+enabled-extensions=['alt-tab-raise-first-window@system76.com', 'always-show-workspaces@system76.com', 'batteryiconfix@kylecorry31.github.io', 'desktop-icons@csoriano', 'pop-shell@system76.com', 'pop-shop-details@system76.com', 'system76-power@system76.com', 'ubuntu-appindicators@ubuntu.com', 'undecorate@sun.wxg@gmail.com', 'no-title-bar@jonaspoehler.de', 'pixel-saver@deadalnix.me', 'hidetopbar@mathieu.bidon.ca', 'unite@hardpixel.eu', 'window-title-in-topbar@fthx', 'freon@UshakovVasilii_Github.yahoo.com', 'cpupower@mko-sl.de', 'update-extensions@franglais125.gmail.com', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'nvidiautil@ethanwharris', 'Vitals@CoreCoding.com']
 
 [org/gnome/shell/extensions/cpupower]
 default-ac-profile=''
 default-battery-profile=''
-profiles=[(0, 10, false, 'Energy Saver', '625191060'), (0, 30, false, 'Quiet', '892569081'), (20, 80, true, 'Multimedia', '1797166622'), (50, 100, true, 'High Performance', '722568428')]
+profiles=[(0, 10, false, 'Energy Saver', '625191060'), (0, 30, false, 'Quiet', '892569081'), (20, 80, true, 'Multimedia', '1797166622'), (50, 100, true, 'High Performance', '722568428'), (15, 100, true, 'Balanced', '2477675657')]
 show-arrow-in-taskbar=true
 show-freq-in-taskbar=true
 show-icon-in-taskbar=true
@@ -199,11 +238,13 @@ taskbar-freq-unit-ghz=true
 
 [org/gnome/shell/extensions/freon]
 drive-utility='nvmecli'
-gpu-utility='bumblebee-nvidia-smi'
+gpu-utility='nvidia-settings'
 group-temperature=true
 hot-sensors=['__average__', '__max__']
 panel-box-index=0
-position-in-panel='center'
+position-in-panel='right'
+show-decimal-value=true
+update-time=2
 
 [org/gnome/shell/extensions/hidetopbar]
 mouse-sensitive=true
@@ -212,6 +253,12 @@ mouse-sensitive=true
 buttons-for-all-win=false
 hide-buttons=false
 only-main-monitor=false
+
+[org/gnome/shell/extensions/nvidiautil]
+position=2
+refreshrate=1
+settingsandsmiconfig=['active', 'active', 'active', 'inactive', 'inactive']
+spacing=8
 
 [org/gnome/shell/extensions/pop-shell]
 activate-launcher=['<Super>p']
@@ -227,9 +274,19 @@ system-wide-ext=true
 [org/gnome/shell/extensions/user-theme]
 name='SolArc-Dark'
 
+[org/gnome/shell/extensions/vitals]
+hide-zeros=false
+hot-sensors=['_memory_usage_', '_system_load_1m_', '_processor_average_', '_system_threads_active_', '_network_wlp0s20f3_rx_', '_network_wlp0s20f3_tx_']
+update-time=2
+use-higher-precision=true
+
 [org/gnome/shell/keybindings]
 open-application-menu=@as []
 toggle-overview=@as []
+
+[org/gnome/shell/weather]
+automatic-location=true
+locations=[<(uint32 2, <('Kansas City', 'KMKC', true, [(0.68278734197285074, -1.6510281351246947)], [(0.68241897278092489, -1.650707395968056)])>)>]
 
 [org/gnome/terminal/legacy]
 default-show-menubar=false
@@ -258,10 +315,10 @@ location-mode='path-bar'
 show-hidden=false
 show-size-column=true
 show-type-column=true
-sidebar-width=148
+sidebar-width=162
 sort-column='name'
 sort-directories-first=true
 sort-order='ascending'
 type-format='category'
-window-position=(978, 123)
+window-position=(3380, 504)
 window-size=(921, 670)

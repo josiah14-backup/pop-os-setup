@@ -53,7 +53,7 @@ export EDITOR=vim
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git git-flow git-extras fasd mvn nvm scala postgres python pylint pep8 autopep8 history-substring-search docker docker-compose emacs colored-man-pages colorize command-not-found vi-mode globalias common-aliases compleat vi-mode zsh-navigation-tools zsh-autosuggestions zsh-syntax-highlighting nix-zsh-completions)
+plugins=(git git-flow git-extras fasd mvn nvm scala postgres python pylint pep8 autopep8 history-substring-search docker docker-compose colored-man-pages colorize command-not-found vi-mode globalias common-aliases compleat vi-mode zsh-navigation-tools zsh-autosuggestions zsh-syntax-highlighting nix-zsh-completions)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -115,3 +115,4 @@ alias ipyvi="ipython --TerminalInteractiveShell.editing_mode=vi"
 export PATH="/home/josiah/.nix-profile/bin:/home/josiah/.nix-profile/sbin:/home/josiah/.cabal/bin:$PATH"
 eval $(thefuck --alias)
 source <(kompose completion zsh)
+alias fd=fdfind
