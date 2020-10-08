@@ -341,7 +341,7 @@ main = do
   shells "sudo apt install -y apt-transport-https ca-certificates gnupg-agent \
          \software-properties-common libgtk-3-dev libicu-dev libncurses-dev \
          \libgmp-dev zlib1g-dev libtinfo-dev libc6-dev libffi-dev g++ gcc make \
-         \xz-utils gnupg gnupg2 libbz2-dev"
+         \xz-utils gnupg gnupg2 libbz2-dev python3-tk"
          empty
   aptInstall "xclip"
              "xclip"
@@ -351,6 +351,10 @@ main = do
              "snapd"
              "Snappy already installed at "
              "Snappy already installed."
+  aptInstall "ecryptfs"
+             "ecryptfs-utils"
+             "eCryptFS already installed at "
+             "eCryptFS already installed."
   aptInstall "git"
              "git"
              "Git already installed at "
@@ -446,6 +450,16 @@ main = do
               "--classic helm"
               "K8S Helm already installed at "
               "K8S Helm already installed."
+  snapInstall "stable"
+              "bitwarden"
+              "bitwarden"
+              "BitWarden already installed at "
+              "BitWarden already installed."
+  snapInstall "stable"
+              "bw"
+              "bw"
+              "BitWarden CLI already installed at "
+              "BitWarden CLI already installed."
   installKinD
   installTerraform
   shells "dconf load / < gnome-settings.dconf" empty
