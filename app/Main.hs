@@ -341,7 +341,7 @@ main = do
   shells "sudo apt install -y apt-transport-https ca-certificates gnupg-agent \
          \software-properties-common libgtk-3-dev libicu-dev libncurses-dev \
          \libgmp-dev zlib1g-dev libtinfo-dev libc6-dev libffi-dev g++ gcc make \
-         \xz-utils gnupg gnupg2 libbz2-dev python3-tk"
+         \xz-utils gnupg gnupg2 libbz2-dev python3-tk liblzma-dev lzma-dev"
          empty
   aptInstall "xclip"
              "xclip"
