@@ -194,11 +194,15 @@ copyDotFilesToHome :: IO ()
 copyDotFilesToHome = do
   homedir <- home
   curdir <- pwd
+  cp (curdir </> ".profile") (homedir </> ".profile")
   cp (curdir </> ".bashrc") (homedir </> ".bashrc")
+  cp (curdir </> ".bash_profile") (homedir </> ".bash_profile")
   cp (curdir </> ".zshrc") (homedir </> ".zshrc")
+  cp (curdir </> ".zprofile") (homedir </> ".zprofile")
   cp (curdir </> ".tmux.conf") (homedir </> ".tmux.conf")
   cp (curdir </> ".gitconfig") (homedir </> ".gitconfig")
   cptree (curdir </> ".xmonad") (homedir </> ".xmonad")
+  cptree (curdir </> ".xobar") (homedir </> ".xobar")
 
 installPowerline :: IO ()
 installPowerline = shellStrictWithErr "pip show powerline-status" empty
@@ -387,6 +391,10 @@ main = do
              "xdotool"
              "xdotool already installed at "
              "xdotool already installed."
+  aptInstall "screenfetch"
+             "screenfetch"
+             "screenfetch already installed at "
+             "screenfetch already installed."
   aptInstall "gnome-tweaks"
              "gnome-tweaks"
              "Gnome Tweaks already installed at "
@@ -450,6 +458,11 @@ main = do
   installKubectl
   installKompose
   snapInstall "stable"
+              "snapd"
+              "snapd"
+              "snapd already installed at "
+              "snapd already installed."
+  snapInstall "stable"
               "helm"
               "--classic helm"
               "K8S Helm already installed at "
@@ -464,6 +477,61 @@ main = do
               "bw"
               "BitWarden CLI already installed at "
               "BitWarden CLI already installed."
+  snapInstall "stable"
+              "aetherp2p"
+              "aetherp2p"
+              "Aetherp2p already installed at "
+              "Aetherp2p already installed."
+  snapInstall "stable"
+              "bare"
+              "bare"
+              "bare already installed at "
+              "bare already installed."
+  snapInstall "stable"
+              "brave"
+              "brave"
+              "Brave Browser already installed at "
+              "Brave Browser already installed."
+  snapInstall "stable"
+              "brave"
+              "brave"
+              "Brave Browser already installed at "
+              "Brave Browser already installed."
+  snapInstall "stable"
+              "feedreader"
+              "feedreader"
+              "feedreader already installed at "
+              "feedreader already installed."
+  snapInstall "stable"
+              "glow"
+              "glow"
+              "glow already installed at "
+              "glow already installed."
+  snapInstall "stable"
+              "joplin-desktop"
+              "joplin-desktop"
+              "joplin-desktop already installed at "
+              "joplin-desktop already installed."
+  snapInstall "stable"
+              "microk8s"
+              "--classic microk8s"
+              "microk8s already installed at "
+              "microk8s already installed."
+  snapInstall "stable"
+              "musescore"
+              "musescore"
+              "Musescore already installed at "
+              "Musescore already installed."
+  snapInstall "stable"
+              "spotify"
+              "spotify"
+              "Spotify already installed at "
+              "Spotify already installed."
+  snapInstall "stable"
+              "teams"
+              "teams"
+              "Teams already installed at "
+              "Teams already installed."
   installKinD
   installTerraform
   shells "dconf load / < gnome-settings.dconf" empty
@@ -471,17 +539,50 @@ main = do
     shell "flatpak remote-add --if-not-exists flathub \
          \ https://dl.flathub.org/repo/flathub.flatpakrepo"
           empty
-  case addFlathubRemoteExitCode of
-    ExitSuccess -> 
-      flatpakInstall "org.signal.Signal"
-      >> flatpakInstall "com.slack.Slack"
-      >> flatpakInstall "im.riot.Riot"
-      >> flatpakInstall "com.microsoft.Teams"
-      >> flatpakInstall "com.spotify.Client"
-      >> flatpakInstall "us.zoom.Zoom"
-      >> flatpakInstall "com.valvesoftware.Steam"
-    ExitFailure exitCode -> die "Could not add the remote 'flathub'."
-  snapInstall "edge"
+  addFlathubBetaRemoteExitCode <-
+    shell "flatpak remote-add --if-not-exists flathub-beta \
+         \ https://dl.flathub.org/beta-repo/flathub-beta.flatpakrepo"
+          empty
+  case (addFlathubRemoteExitCode, addFlathubBetaRemoteExitCode) of
+    (ExitSuccess, ExitSuccess) -> 
+      flatpakInstall "ca.desrt.dconf-editor"
+        >> flatpakInstall "com.bitwarden.desktop"
+        >> flatpakInstall "com.brave.Browser"
+        >> flatpakInstall "com.discordapp.Discord"
+        >> flatpakInstall "com.github.Eloston.UngoogledChromium"
+        >> flatpakInstall "com.github.Eloston.UngoogledChromium.Codecs"
+        >> flatpakInstall "com.github.inercia.k3x"
+        >> flatpakInstall "com.jetbrains.PyCharm-Community"
+        >> flatpakInstall "com.microsoft.Teams"
+        >> flatpakInstall "com.nextcloud.desktopclient.nextcloud"
+        >> flatpakInstall "com.obsproject.Studio"
+        >> flatpakInstall "com.slack.Slack"
+        >> flatpakInstall "com.spotify.Client"
+        >> flatpakInstall "com.sublimetext.three"
+        >> flatpakInstall "com.valvesoftware.Steam"
+        >> flatpakInstall "im.riot.Riot"
+        >> flatpakInstall "io.lbry.lbry-app"
+        >> flatpakInstall "io.thp.numptyphysics"
+        >> flatpakInstall "net.cozic.joplin_desktop"
+        >> flatpakInstall "network.loki.Session"
+        >> flatpakInstall "org.electrum.electrum"
+        >> flatpakInstall "org.freedesktop.Platform.ffmpeg-full"
+        >> flatpakInstall "org.gimp.GIMP"
+        >> flatpakInstall "org.gimp.GIMP.Manual"
+        >> flatpakInstall "org.gnome.Fractal"
+        >> flatpakInstall "org.gnome.Rhythmbox3"
+        >> flatpakInstall "org.gnome.Solanum"
+        >> flatpakInstall "org.mozilla.firefox"
+        >> flatpakInstall "org.musescore.Musescore"
+        >> flatpakInstall "org.remmina.Remmina"
+        >> flatpakInstall "org.signal.Signal"
+        >> flatpakInstall "org.telegram.desktop"
+        >> flatpakInstall "org.telegram.desktop.webview"
+        >> flatpakInstall "us.zoom.Zoom"
+    (ExitFailure exitCode, ExitSuccess) -> die "Could not add the remote 'flathub'."
+    (ExitSuccess, ExitFailure exitCode) -> die "Could not add the remote 'flathub-beta'."
+    (ExitFailure exitCode0, ExitFailure exitCode1) -> die "Could not add ANY of the flatpak remotes."
+  snapInstall "stable"
               "emacs"
               "--classic emacs"
               "Emacs already installed at "

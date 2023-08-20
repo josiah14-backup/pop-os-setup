@@ -126,3 +126,10 @@ fi
 eval $(thefuck --alias)
 source <(kompose completion bash)
 alias fd=fdfind
+
+# Rust configs
+export RUST_SRC_PATH=/home/josiah/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/home/josiah/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)

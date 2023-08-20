@@ -53,9 +53,12 @@ export EDITOR=vim
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git git-flow git-extras fasd mvn nvm scala postgres python pylint pep8 autopep8 history-substring-search docker docker-compose colored-man-pages colorize command-not-found vi-mode globalias common-aliases compleat vi-mode zsh-navigation-tools zsh-autosuggestions zsh-syntax-highlighting nix-zsh-completions)
+plugins=(git fasd python history-substring-search colored-man-pages colorize command-not-found globalias common-aliases compleat vi-mode zsh-navigation-tools zsh-autosuggestions zsh-syntax-highlighting nix-zsh-completions nix-shell)
 
 source $ZSH/oh-my-zsh.sh
+
+prompt_nix_shell_setup
+any-nix-shell zsh --info-right | source /dev/stdin
 
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
@@ -93,16 +96,21 @@ bindkey -M vicmd 'j' history-substring-search-down
 export PATH=/home/josiah/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/git-tf-2.0.3:/usr/local/bin/git-tf-2.0.3:/home/josiah/.local/bin:/usr/local/android-sdk/bin:/usr/local/android-sdk/tools:/usr/local/android-sdk/tools/bin:/home/josiah/.nix-profile/bin:/home/josiah/.nix-profile/sbin:/home/josiah/.cabal/bin:/home/josiah/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/git-tf-2.0.3:/usr/local/bin/git-tf-2.0.3:/home/josiah/.local/bin:/usr/local/android-sdk/bin:/usr/local/android-sdk/tools:/usr/local/android-sdk/tools/bin:/home/josiah/.local/bin:/home/josiah/.nix-profile/bin:/home/josiah/.nix-profile/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/home/josiah/programs/intellij/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/android-sdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/android-sdk/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/usr/share/maven/bin:/home/josiah/.conscript/bin
 #
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export LIBRARY_PATH="/usr/lib/gcc/x86_64-linux-gnu/9"
 export PATH="$PATH:$HOME/.rvm/bin"
-alias screeps-dir=/home/josiah/.config/Screeps/scripts/screeps.com/tutorial-1
 export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="${PATH}:${HOME}/.krew/bin"
+export PATH="$HOME/.local/app-img:$PATH" 
+export PATH="$HOME/.radicle/bin:$PATH"
+export PATH="$PATH:/home/josiah/.local/share/coursier/bin"
+export RUST_SRC_PATH=/home/josiah/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library
+alias screeps-dir=/home/josiah/.config/Screeps/scripts/screeps.com/tutorial-1
 
 set -o vi
 
 alias j='z'
 alias jj='zz'
 alias zshrc='v ~/.zshrc'
-export d=/media/josiah/extra-drive-1
 alias lpgp="lpass show --password -c"
 
 export HISTCONTROL=ignoreboth
@@ -116,3 +124,24 @@ export PATH="/home/josiah/.nix-profile/bin:/home/josiah/.nix-profile/sbin:/home/
 eval $(thefuck --alias)
 source <(kompose completion zsh)
 alias fd=fdfind
+
+alias ssh-tnw="ssh -p 1488 amnesia@208.94.243.156"
+
+export PATH="${HOME}/.poetry/bin:${PATH}"
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+if [ -e /home/josiah/.nix-profile/etc/profile.d/nix.sh ]; then . /home/josiah/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/josiah/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/home/josiah/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/josiah/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/josiah/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+#export SBT_CREDENTIALS="$HOME/.ivy2/.credentials"
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/home/josiah/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
