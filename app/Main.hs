@@ -417,6 +417,10 @@ main = do
              "python3"
              "Python 3.8 already installed at "
              "Python 3.8 already installed."
+  aptInstall "python3-pip"
+             "pip"
+             "Pip already installed at "
+             "Pip already installed."
   shell "sudo update-alternatives --install \
        \ /usr/bin/python python /usr/bin/python3 1"
         empty
