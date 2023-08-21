@@ -311,19 +311,6 @@ prepareAzureCliInstall = which "az" >>= \azInstalled ->
       >> shells "sudo apt update -y" empty
       >> shells "sudo apt install -y azure-cli" empty
 
-installHaskellIDEEngine :: IO ()
-installHaskellIDEEngine = which "hie" >>= \hieInstalled ->
-  case hieInstalled of
-    Just hieLoc -> echoWhichLocation hieLoc
-                                     "Haskell IDE Engine already installed at "
-                                     "Haskell IDE Engine already installed."
-    Nothing ->
-      shells "git clone https://github.com/haskell/haskell-ide-engine \
-             \--recurse-submodules"
-             empty
-      >> cd "haskell-ide-engine" >> shells "stack ./install.hs hie" empty
-      >> cd ".." >> rmtree "haskell-ide-engine"
-
 installPythonPoetry :: IO ()
 installPythonPoetry = which "poetry" >>= \poetryInstalled ->
   case poetryInstalled of
@@ -404,7 +391,6 @@ main = do
              "haskell-stack"
              "Haskell Stack tool already installed at "
              "Haskell Stack tool already installed."
-  installHaskellIDEEngine
   shell "stack upgrade --binary-only" empty
   aptInstall "tmux"
              "tmux"
