@@ -185,7 +185,7 @@ installOhMyZshPlugins = do
     )
   case nixZshCompletionsInstalled of
     False ->
-      shells "git clone git@github.com:spwhitt/nix-zsh-completions.git \
+      shells "git clone https://github.com/nix-community/nix-zsh-completions.git \
             \ ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/nix-zsh-completions"
              empty
     True -> echo "Nix-Zsh-Completions already installed."
