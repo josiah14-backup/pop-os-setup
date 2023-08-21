@@ -589,7 +589,7 @@ main = do
         >> flatpakInstall "org.gnome.Rhythmbox3"
         >> flatpakInstall "org.gnome.Solanum"
         >> flatpakInstall "org.mozilla.firefox"
-        >> flatpakInstall "org.musescore.Musescore"
+        >> flatpakInstall "org.musescore.MuseScore"
         >> flatpakInstall "org.remmina.Remmina"
         >> flatpakInstall "org.signal.Signal"
         >> flatpakInstall "org.telegram.desktop"
