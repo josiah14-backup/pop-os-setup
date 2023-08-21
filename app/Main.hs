@@ -350,7 +350,7 @@ main = do
   shell "sudo apt -y update" empty
   aptInstall "curl" "curl" "cURL already installed at " "cURL already installed."
   shells "sudo apt install -y apt-transport-https ca-certificates gnupg-agent \
-         \build-essential libffi6 libgmp10 libcurses5 libtinfo5 \
+         \build-essential libffi7 libgmp10 libncurses5 libtinfo5 \
          \software-properties-common libgtk-3-dev libicu-dev libncurses-dev \
          \libgmp-dev zlib1g-dev libtinfo-dev libc6-dev libffi-dev g++ gcc make \
          \xz-utils gnupg gnupg2 libbz2-dev python3-tk liblzma-dev lzma-dev"
