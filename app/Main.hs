@@ -518,7 +518,7 @@ main = do
               "Spotify already installed."
   snapInstall "stable"
               "teams"
-              "teams"
+              "teams-for-linux"
               "Teams already installed at "
               "Teams already installed."
   installKinD
