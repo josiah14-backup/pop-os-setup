@@ -319,9 +319,9 @@ installPythonPoetry = which "poetry" >>= \poetryInstalled ->
                         "Poetry package manager for Python already installed at "
                         "Poetry package manager for Python already installed."
     Nothing ->
-      (shells "python3"
+      (shells "python3 -"
              $ inshell "curl -sSL \
-                       \https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py"
+                       \https://install.python-poetry.org"
                        empty)
       >> shells "echo 'export PATH=\"${HOME}/.poetry/bin:${PATH}\"' >> ~/.zprofile" empty
 
