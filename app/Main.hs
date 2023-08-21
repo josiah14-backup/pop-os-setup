@@ -583,7 +583,6 @@ main = do
         >> flatpakInstall "net.cozic.joplin_desktop"
         >> flatpakInstall "network.loki.Session"
         >> flatpakInstall "org.electrum.electrum"
-        >> flatpakInstall "org.freedesktop.Platform.ffmpeg-full"
         >> flatpakInstall "org.gimp.GIMP"
         >> flatpakInstall "org.gimp.GIMP.Manual"
         >> flatpakInstall "org.gnome.Fractal"
