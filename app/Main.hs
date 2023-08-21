@@ -202,7 +202,6 @@ copyDotFilesToHome = do
   cp (curdir </> ".tmux.conf") (homedir </> ".tmux.conf")
   cp (curdir </> ".gitconfig") (homedir </> ".gitconfig")
   cptree (curdir </> ".xmonad") (homedir </> ".xmonad")
-  cptree (curdir </> ".xmobar") (homedir </> ".xmobar")
 
 installPowerline :: IO ()
 installPowerline = shellStrictWithErr "pip show powerline-status" empty
