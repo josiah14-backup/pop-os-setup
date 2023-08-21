@@ -129,7 +129,7 @@ installRustLang =
                          "Rustup already installed."
      Nothing -> do
        rustupInstallSuccessful <-
-         shellStrictWithErr "sh"
+         shellStrictWithErr "sh -s -- -y"
          $ inshell "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs"
                    empty
        case rustupInstallSuccessful of
@@ -138,6 +138,27 @@ installRustLang =
          (ExitFailure _, stdOutText, stdErrText) ->
            echoText (stdOutText <> stdErrText)
            >> die "ERROR: Could not install Rustup"
+
+installHaskellToolchain :: IO ()
+installHaskellToolchain = 
+  which "ghcup"
+  >>= \ghcupInstalled ->
+   case ghcupInstalled of
+     Just ghcupLoc ->
+       echoWhichLocation ghcupLoc
+                         "GHCup already installed at "
+                         "GHCup already installed."
+     Nothing -> do
+       ghcupInstallSuccessful <-
+         shellStrictWithErr "BOOTSTRAP_HASKELL_NONINTERACTIVE=1 BOOTSTRAP_HASKELL_GHC_VERSION=latest BOOTSTRAP_HASKELL_CABAL_VERSION=latest BOOTSTRAP_HASKELL_INSTALL_STACK=1 BOOTSTRAP_HASKELL_INSTALL_HLS=1 BOOTSTRAP_HASKELL_ADJUST_BASHRC=P sh -s -- -y"
+         $ inshell "curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org"
+                   empty
+       case ghcupInstallSuccessful of
+         (ExitSuccess, stdOutText, stdErrText) -> 
+           echoText (stdOutText <> stdErrText) >> echo "GHCup Installed."
+         (ExitFailure _, stdOutText, stdErrText) ->
+           echoText (stdOutText <> stdErrText)
+           >> die "ERROR: Could not install GHCup"
 
 installOhMyZsh :: IO ()
 installOhMyZsh =
@@ -329,6 +350,7 @@ main = do
   shell "sudo apt -y update" empty
   aptInstall "curl" "curl" "cURL already installed at " "cURL already installed."
   shells "sudo apt install -y apt-transport-https ca-certificates gnupg-agent \
+         \build-essential libffi6 libgmp10 libcurses5 libtinfo5 \
          \software-properties-common libgtk-3-dev libicu-dev libncurses-dev \
          \libgmp-dev zlib1g-dev libtinfo-dev libc6-dev libffi-dev g++ gcc make \
          \xz-utils gnupg gnupg2 libbz2-dev python3-tk liblzma-dev lzma-dev"
@@ -361,6 +383,7 @@ main = do
              "vim-gtk3"
              "GVim already installed at "
              "GVim already installed."
+  installHaskellToolchain
   aptInstall "lpass"
              "lastpass-cli"
              "LastPass CLI client already installed at "
@@ -386,11 +409,6 @@ main = do
              "Gnome Tweaks already installed at "
              "Gnome Tweaks already installed."
   installBraveBrowser
-  aptInstall "stack"
-             "haskell-stack"
-             "Haskell Stack tool already installed at "
-             "Haskell Stack tool already installed."
-  shell "stack upgrade --binary-only" empty
   aptInstall "tmux"
              "tmux"
              "Tmux already installed at "
@@ -521,6 +539,16 @@ main = do
               "teams-for-linux"
               "Teams already installed at "
               "Teams already installed."
+  snapInstall "stable"
+              "emacs"
+              "--classic emacs"
+              "Emacs already installed at "
+              "Emacs already installed."
+  snapInstall "edge"
+              "thefuck"
+              "--classic thefuck"
+              "thefuck already installed at "
+              "thefuck already installed."
   installKinD
   installTerraform
   shells "dconf load / < gnome-settings.dconf" empty
@@ -571,14 +599,4 @@ main = do
     (ExitFailure exitCode, ExitSuccess) -> die "Could not add the remote 'flathub'."
     (ExitSuccess, ExitFailure exitCode) -> die "Could not add the remote 'flathub-beta'."
     (ExitFailure exitCode0, ExitFailure exitCode1) -> die "Could not add ANY of the flatpak remotes."
-  snapInstall "stable"
-              "emacs"
-              "--classic emacs"
-              "Emacs already installed at "
-              "Emacs already installed."
-  snapInstall "edge"
-              "thefuck"
-              "--classic thefuck"
-              "thefuck already installed at "
-              "thefuck already installed."
   echo "DONE"
