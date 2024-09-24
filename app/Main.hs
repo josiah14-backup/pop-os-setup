@@ -7,6 +7,7 @@
 -- as I regard it as non-essential to the system and a rather complex
 -- process to take the time to script-up.
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE LambdaCase #-}
 
 module Main where
 

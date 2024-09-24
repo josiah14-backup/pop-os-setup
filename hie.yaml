@@ -1,0 +1,4 @@
+cradle:
+  stack:
+    - path: "./"
+      component: "pop-os-setup:exe:pop-os-setup-exe"
