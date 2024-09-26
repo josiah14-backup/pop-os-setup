@@ -190,38 +190,56 @@ installOhMyZsh =
 installOhMyZshPlugins :: IO ()
 installOhMyZshPlugins = do
   zshCustomPluginsDir <- fmap (</> ".oh-my-zsh/custom/plugins") home
+
   zshAutosuggestionsInstalled <-
     testpath
       ( zshCustomPluginsDir </> "zsh-autosuggestions" )
-  if zshAutosuggestionsInstalled then
+  if not zshAutosuggestionsInstalled then
     shells
-      "git clone https://github.com/zsh-users/zsh-autosuggestions \
-      \ ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+      "echo 'deb http://download.opensuse.org/repositories/shells:/zsh-users:/zsh-autosuggestions/xUbuntu_22.04/ /' \
+      \| sudo tee /etc/apt/sources.list.d/shells:zsh-users:zsh-autosuggestions.list \
+      \curl -fsSL https://download.opensuse.org/repositories/shells:zsh-users:zsh-autosuggestions/xUbuntu_22.04/Release.key \
+      \| gpg --dearmor \
+      \| sudo tee /etc/apt/trusted.gpg.d/shells_zsh-users_zsh-autosuggestions.gpg > /dev/null"
       empty
+    >> shells "sudo apt -y update" empty
+    >> shells "sudo apt -y install zsh-autosuggestions" empty
   else
     echo "Zsh-Autosuggestions already installed"
+
   zshSyntaxHighlightingInstalled <-
     testpath
-      ( zshCustomPluginsDir </> "zsh-syntax-highlighting"
-      )
-  if zshSyntaxHighlightingInstalled then
-    shells
-      "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
-      \ ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
-      empty
+      ( zshCustomPluginsDir </> "zsh-syntax-highlighting" )
+  if not zshSyntaxHighlightingInstalled then
+    aptInstall
+      "zsh-syntax-highlighting"
+      "zsh-syntax-highlighting"
+      "zsh-syntax-highlighting already installed at "
+      "zsh-syntax-highlighting already installed."
   else
     echo "Zsh-Syntax-Highlighting already installed."
+
   nixZshCompletionsInstalled <-
     testpath
-      ( zshCustomPluginsDir </> "nix-zsh-completions"
-      )
-  if nixZshCompletionsInstalled then
+      ( zshCustomPluginsDir </> "nix-zsh-completions" )
+  if not nixZshCompletionsInstalled then
     shells
       "git clone https://github.com/nix-community/nix-zsh-completions.git \
       \ ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/nix-zsh-completions"
       empty
   else
     echo "Nix-Zsh-Completions already installed."
+
+  nixShellInstalled <-
+    testpath
+      ( zshCustomPluginsDir </> "nix-shell" )
+  if not nixShellInstalled then
+    shells
+      "git clone https://github.com/chisui/zsh-nix-shell.git \
+      \ ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/nix-shell"
+      empty
+  else
+    echo "Nix-Shell ZSH plugin already installed."
 
 copyDotFilesToHome :: IO ()
 copyDotFilesToHome = do
