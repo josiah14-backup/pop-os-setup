@@ -391,7 +391,7 @@ installPythonPoetry =
 
 main :: IO ()
 main = do
-  shell "sudo apt -y update" empty
+  shell "sudo apt -y update && sudo apt -y upgrade" empty
   aptInstall "curl" "curl" "cURL already installed at " "cURL already installed."
   shells
     "sudo apt install -y apt-transport-https ca-certificates gnupg-agent \
