@@ -286,7 +286,7 @@ installKompose =
         "Kompose already installed."
     Nothing ->
       shells
-        "curl -L https://github.com/kubernetes/kompose/releases/download/v1.21.0/kompose-linux-amd64 -o kompose"
+        "curl -L https://github.com/kubernetes/kompose/releases/download/v1.34.0/kompose-linux-amd64 -o kompose"
         empty
         >> chmod executable "./kompose"
         >> shells "sudo mv ./kompose /usr/local/bin/kompose" empty
@@ -301,7 +301,7 @@ installKinD =
         "KinD already installed."
     Nothing ->
       shells
-        "curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.8.1/kind-linux-amd64"
+        "curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.24.0/kind-linux-amd64"
         empty
         >> chmod executable "./kind"
         >> shells "sudo mv ./kind /usr/local/bin/kind" empty
@@ -315,16 +315,18 @@ installTerraform =
         "Terraform already installed at "
         "Terrafrom already installed."
     Nothing ->
-      shells "sudo apt-key add -" (
-          inshell "curl -fsSL https://apt.releases.hashicorp.com/gpg" empty
-      )
-        >> shells
-          "sudo apt-add-repository \
-          \ \"deb [arch=amd64] https://apt.releases.hashicorp.com \
-          \ $(lsb_release -cs) main\""
-          empty
-        >> shells "sudo apt -y update" empty
-        >> shells "sudo apt install -y terraform" empty
+      shells
+        "wget -O- https://apt.releases.hashicorp.com/gpg \
+        \| gpg --dearmor \
+        \| sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null"
+        empty
+      >> shells
+        "echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+        \https://apt.releases.hashicorp.com $(lsb_release -cs) main\" \
+        \| sudo tee /etc/apt/sources.list.d/hashicorp.list"
+        empty
+      >> shells "sudo apt -y update" empty
+      >> shells "sudo apt install -y terraform" empty
 
 installKubectl :: IO ()
 installKubectl =
@@ -336,15 +338,16 @@ installKubectl =
         "kubectl already installed."
     Nothing ->
       shells
-        "curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg \
-        \| sudo apt-key add -"
+        "curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key \
+        \| sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg \
+        \&& sudo chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg"
         empty
         >> shells "sudo tee -a /etc/apt/sources.list.d/kubernetes.list" (
                 inshell
-                  "echo \"deb https://apt.kubernetes.io/ \
-                  \kubernetes-xenial main\""
+                  "echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /'"
                   empty
             )
+        >> shells "sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list" empty
         >> shells "sudo apt -y update" empty
         >> shells "sudo apt install -y kubectl" empty
 
