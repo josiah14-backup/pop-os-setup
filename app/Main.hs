@@ -3,6 +3,11 @@
 -- manually before running this script.
 -- https://docs.conda.io/en/latest/miniconda.html#linux-installers
 --
+-- Creating the gpg key and registering it with pass for Racher Desktop
+-- is also something I could not automate. To do that, run these commands:
+-- gpg --generate-key
+-- pass init <the hash for the .rev filename output by the previous command>
+--
 -- This installation also does not currently handle system theming
 -- as I regard it as non-essential to the system and a rather complex
 -- process to take the time to script-up.
@@ -196,14 +201,9 @@ installOhMyZshPlugins = do
       ( zshCustomPluginsDir </> "zsh-autosuggestions" )
   if not zshAutosuggestionsInstalled then
     shells
-      "echo 'deb http://download.opensuse.org/repositories/shells:/zsh-users:/zsh-autosuggestions/xUbuntu_22.04/ /' \
-      \| sudo tee /etc/apt/sources.list.d/shells:zsh-users:zsh-autosuggestions.list \
-      \curl -fsSL https://download.opensuse.org/repositories/shells:zsh-users:zsh-autosuggestions/xUbuntu_22.04/Release.key \
-      \| gpg --dearmor \
-      \| sudo tee /etc/apt/trusted.gpg.d/shells_zsh-users_zsh-autosuggestions.gpg > /dev/null"
+      "git clone https://github.com/zsh-users/zsh-autosuggestions \
+      \ ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
       empty
-    >> shells "sudo apt -y update" empty
-    >> shells "sudo apt -y install zsh-autosuggestions" empty
   else
     echo "Zsh-Autosuggestions already installed"
 
@@ -211,11 +211,10 @@ installOhMyZshPlugins = do
     testpath
       ( zshCustomPluginsDir </> "zsh-syntax-highlighting" )
   if not zshSyntaxHighlightingInstalled then
-    aptInstall
-      "zsh-syntax-highlighting"
-      "zsh-syntax-highlighting"
-      "zsh-syntax-highlighting already installed at "
-      "zsh-syntax-highlighting already installed."
+    shells
+      "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
+      \ ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+      empty
   else
     echo "Zsh-Syntax-Highlighting already installed."
 
@@ -290,7 +289,7 @@ installDocker = do
           empty
         >> shells "sudo apt -y update" empty
         >> shells
-          "sudo apt install -y docker-ce docker-ce-cli containerd.io \
+          "sudo apt install -y docker docker-ce docker-ce-cli containerd.io \
           \docker-compose"
           empty
 
@@ -323,6 +322,27 @@ installKinD =
         empty
         >> chmod executable "./kind"
         >> shells "sudo mv ./kind /usr/local/bin/kind" empty
+
+installRancherDesktop :: IO ()
+installRancherDesktop =
+  which "rancher-desktop" >>= \case
+    Just rancherLoc ->
+      echoWhichLocation
+        rancherLoc
+        "Rancher Desktop already installed at "
+        "Rancher Desktop already installed."
+    Nothing ->
+      shells
+        "curl -s https://download.opensuse.org/repositories/isv:/Rancher:/stable/deb/Release.key \
+        \| gpg --dearmor \
+        \| sudo dd status=none of=/usr/share/keyrings/isv-rancher-stable-archive-keyring.gpg \
+        \&& echo 'deb [signed-by=/usr/share/keyrings/isv-rancher-stable-archive-keyring.gpg] https://download.opensuse.org/repositories/isv:/Rancher:/stable/deb/ ./' \
+        \| sudo dd status=none of=/etc/apt/sources.list.d/isv-rancher-stable.list"
+        empty
+      >> shells "sudo usermod -a -G kvm \"$USER\"" empty
+      >> shells "sudo apt -y update && sudo apt -y install rancher-desktop" empty
+      >> shells "sudo sysctl -w net.ipv4.ip_unprivileged_port_start=80" empty
+      >> shells "sudo echo \"net.ipv4.ip_unprivileged_port_start=80\" >> /etc/sysctl.conf" empty
 
 installTerraform :: IO ()
 installTerraform =
@@ -413,14 +433,148 @@ installPythonPoetry =
 main :: IO ()
 main = do
   shell "sudo apt -y update && sudo apt -y upgrade" empty
-  aptInstall "curl" "curl" "cURL already installed at " "cURL already installed."
+  aptInstall
+    "curl"
+    "curl"
+    "cURL already installed at "
+    "cURL already installed."
   shells
     "sudo apt install -y apt-transport-https ca-certificates gnupg-agent \
-    \build-essential libffi7 libgmp10 libncurses5 libtinfo5 \
+    \build-essential autoconf libffi7 libgmp10 libncurses5 libtinfo5 \
     \software-properties-common libgtk-3-dev libicu-dev libncurses-dev \
     \libgmp-dev zlib1g-dev libtinfo-dev libc6-dev libffi-dev g++ gcc make \
-    \xz-utils gnupg gnupg2 libbz2-dev python3-tk liblzma-dev lzma-dev"
+    \xz-utils gnupg gnupg2 libbz2-dev python3-tk liblzma-dev lzma-dev linux-headers-$(uname -r)"
     empty
+  aptInstall
+    "ansible"
+    "ansible"
+    "ansible already installed at "
+    "ansible already installed."
+  aptInstall
+    "herbstluftwm"
+    "herbstluftwm"
+    "herbstluftwm already installed at "
+    "herbstluftwm already installed."
+  aptInstall
+    "blt-dev"
+    "blt-dev"
+    "blt-dev already installed at "
+    "blt-dev already installed."
+  aptInstall
+    "blueman"
+    "blueman"
+    "blueman already installed at "
+    "blueman already installed."
+  aptInstall
+    "bluez-tools"
+    "bluez-tools"
+    "bluez-tools already installed at "
+    "bluez-tools already installed."
+  aptInstall
+    "brave-browser"
+    "brave-browser"
+    "brave-browser already installed at "
+    "brave-browser already installed."
+  aptInstall
+    "bridge-utils"
+    "bridge-utils"
+    "bridge-utils already installed at "
+    "bridge-utils already installed."
+  aptInstall
+    "bzip2"
+    "bzip2"
+    "bzip2 already installed at "
+    "bzip2 already installed."
+  aptInstall
+    "cheese"
+    "cheese"
+    "cheese already installed at "
+    "cheese already installed."
+  aptInstall
+    "chrome-gnome-shell"
+    "chrome-gnome-shell"
+    "chrome-gnome-shell already installed at "
+    "chrome-gnome-shell already installed."
+  aptInstall
+    "cmake"
+    "cmake"
+    "cmake already installed at "
+    "cmake already installed."
+  aptInstall
+    "dash"
+    "dash"
+    "dash already installed at "
+    "dash already installed."
+  aptInstall
+    "dctrl-tools"
+    "dctrl-tools"
+    "dctrl-tools already installed at "
+    "dctrl-tools already installed."
+  aptInstall
+    "debhelper"
+    "debhelper"
+    "debhelper already installed at "
+    "debhelper already installed."
+  aptInstall
+    "dialog"
+    "dialog"
+    "dialog already installed at "
+    "dialog already installed."
+  aptInstall
+    "dmeventd"
+    "dmeventd"
+    "dmeventd already installed at "
+    "dmeventd already installed."
+  aptInstall
+    "expect"
+    "expect"
+    "expect already installed at "
+    "expect already installed."
+  aptInstall
+    "fd-find"
+    "fd-find"
+    "fd-find already installed at "
+    "fd-find already installed."
+  aptInstall
+    "fdisk"
+    "fdisk"
+    "fdisk already installed at "
+    "fdisk already installed."
+  aptInstall
+    "file"
+    "file"
+    "file already installed at "
+    "file already installed."
+  aptInstall
+    "firefox"
+    "firefox"
+    "firefox already installed at "
+    "firefox already installed."
+  aptInstall
+    "firejail"
+    "firejail"
+    "firejail already installed at "
+    "firejail already installed."
+  aptInstall
+    "firejail-profiles"
+    "firejail-profiles"
+    "firejail-profiles already installed at "
+    "firejail-profiles already installed."
+  aptInstall
+    "firetools"
+    "firetools"
+    "firetools already installed at "
+    "firetools already installed."
+  aptInstall
+    "fonts-arabeyes"
+    "fonts-arabeyes"
+    "fonts-arabeyes already installed at "
+    "fonts-arabeyes already installed."
+  aptInstall
+    "fonts-kacst"
+    "fonts-kacst"
+    "fonts-kacst already installed at "
+    "fonts-kacst already installed."
   aptInstall
     "xclip"
     "xclip"
@@ -447,6 +601,107 @@ main = do
     "Git already installed at "
     "Git already installed."
   aptInstall
+    "gnome-settings-daemon"
+    "gnome-settings-daemon"
+    "gnome-settings-daemon already installed at "
+    "gnome-settings-daemon already installed."
+  aptInstall
+    "gnome-shell-extension-desktop-icons-ng"
+    "gnome-shell-extension-desktop-icons-ng"
+    "gnome-shell-extension-desktop-icons-ng already installed at "
+    "gnome-shell-extension-desktop-icons-ng already installed."
+  aptInstall
+    "gnome-themes-extra"
+    "gnome-themes-extra"
+    "gnome-themes-extra already installed at "
+    "gnome-themes-extra already installed."
+  shells
+    "sudo apt install -y gstreamer1.0-alsa gstreamer1.0-clutter-3.0 gstreamer1.0-gl \
+    \gstreamer1.0-gtk3 gstreamer1.0-pakcagekit gstreamer1.0-pipewire gstreamer1.0-plugins-base \
+    \gstreamer1.0-plugins-base-apps gstreamer1.0-plugins-good gstreamer1.0-pulseaudio gstreamer1.0-tools \
+    \gstreamer1.0-x gstreamer1.0-0 \
+    \gstreamer1.0-adapter-pulseeffects gstreamer1.0-autogain-pulseeffects gstreamer1.0-convolver-pulseeffects gstreamer1.0-crystalizer-pulseeffects \
+    \gstreamer1.0-espeak gstreamer1.0-libav gstreamer1.0-nice \
+    \gstreamer1.0-omx-bellagio-config gstreamer1.0-omx-generic gstreamer1.0-omx-generic-config \
+    \gstreamer1.0-opencv gstreamer1.0-pocketsphinx gstreamer1.0-python3-plugin-loader \
+    \gstreamer1.0-qt5 gstreamer1.0-rtsp gstreamer1.0-vaapi gstreamer1.0-wpe gstreamer1.0-fdkaac"
+    empty
+  aptInstall
+    "gtk2-engines-murrine"
+    "gtk2-engines-murrine"
+    "gtk2-engines-murrine already installed at "
+    "gtk2-engines-murrine already installed."
+  aptInstall
+    "htop"
+    "htop"
+    "htop already installed at "
+    "htop already installed."
+  aptInstall
+    "i2p"
+    "i2p"
+    "i2p already installed at "
+    "i2p already installed."
+  aptInstall
+    "i965-va-driver"
+    "i965-va-driver"
+    "i965-va-driver already installed at "
+    "i965-va-driver already installed."
+  aptInstall
+    "ibus-mozc"
+    "ibus-mozc"
+    "ibus-mozc already installed at "
+    "ibus-mozc already installed."
+  aptInstall
+    "icaclient"
+    "icaclient"
+    "icaclient already installed at "
+    "icaclient already installed."
+  aptInstall
+    "ice"
+    "ice"
+    "ice already installed at "
+    "ice already installed."
+  aptInstall
+    "inkscape"
+    "inkscape"
+    "inkscape already installed at "
+    "inkscape already installed."
+  aptInstall
+    "intel-media-va-driver-non-free"
+    "intel-media-va-driver-non-free"
+    "intel-media-va-driver-non-free already installed at "
+    "intel-media-va-driver-non-free already installed."
+  aptInstall
+    "jq"
+    "jq"
+    "jq already installed at "
+    "jq already installed."
+  aptInstall
+    "julia"
+    "julia"
+    "julia already installed at "
+    "julia already installed."
+  aptInstall
+    "julia-common"
+    "julia-common"
+    "julia-common already installed at "
+    "julia-common already installed."
+  aptInstall
+    "julia-doc"
+    "julia-doc"
+    "julia-doc already installed at "
+    "julia-doc already installed."
+  aptInstall
+    "kpartx"
+    "kpartx"
+    "kpartx already installed at "
+    "kpartx already installed."
+  aptInstall
+    "kpartx-boot"
+    "kpartx-boot"
+    "kpartx-boot already installed at "
+    "kpartx-boot already installed."
+  aptInstall
     "vim"
     "vim"
     "Vim already installed at "
@@ -463,10 +718,171 @@ main = do
     "LastPass CLI client already installed at "
     "LastPass CLI client already installed."
   aptInstall
+    "lvm2"
+    "lvm2"
+    "lvm2 already installed at "
+    "lvm2 already installed."
+  aptInstall
+    "mesa-utils"
+    "mesa-utils"
+    "mesa-utils already installed at "
+    "mesa-utils already installed."
+  aptInstall
+    "mesa-va-drivers"
+    "mesa-va-drivers"
+    "mesa-va-drivers already installed at "
+    "mesa-va-drivers already installed."
+  aptInstall
+    "mesa-va-drivers"
+    "mesa-va-drivers"
+    "mesa-va-drivers already installed at "
+    "mesa-va-drivers already installed."
+  aptInstall
+    "nvidia-driver-560"
+    "nvidia-driver-560"
+    "nvidia-driver-560 already installed at "
+    "nvidia-driver-560 already installed."
+  aptInstall
+    "nvidia-utils-560"
+    "nvidia-utils-560"
+    "nvidia-utils-560 already installed at "
+    "nvidia-utils-560 already installed."
+  aptInstall
+    "nvidia-compute-utils-560"
+    "nvidia-compute-utils-560"
+    "nvidia-compute-utils-560 already installed at "
+    "nvidia-compute-utils-560 already installed."
+  aptInstall
+    "nvidia-dkms-560"
+    "nvidia-dkms-560"
+    "nvidia-dkms-560 already installed at "
+    "nvidia-dkms-560 already installed."
+  aptInstall
+    "xserver-xorg-video-nvidia-560"
+    "xserver-xorg-video-nvidia-560"
+    "xserver-xorg-video-nvidia-560 already installed at "
+    "xserver-xorg-video-nvidia-560 already installed."
+  aptInstall
+    "nvidia-kernel-common-560"
+    "nvidia-kernel-common-560"
+    "nvidia-kernel-common-560 already installed at "
+    "nvidia-kernel-common-560 already installed."
+  aptInstall
+    "nvidia-kernel-source-560"
+    "nvidia-kernel-source-560"
+    "nvidia-kernel-source-560 already installed at "
+    "nvidia-kernel-source-560 already installed."
+  aptInstall
+    "psql"
+    "postgresql-all"
+    "postgresql already installed at "
+    "postgresql already installed."
+  aptInstall
+    "pass"
+    "pass"
+    "pass already installed at "
+    "pass already installed."
+  aptInstall
+    "qutebrowser"
+    "qutebrowser"
+    "qutebrowser already installed at "
+    "qutebrowser already installed."
+  installRancherDesktop
+  aptInstall
+    "rhythmbox"
+    "rhythmbox"
+    "rhythmbox already installed at "
+    "rhythmbox already installed."
+  aptInstall
+    "rkhunter"
+    "rkhunter"
+    "rkhunter already installed at "
+    "rkhunter already installed."
+  aptInstall
+    "rvm"
+    "rvm"
+    "rvm already installed at "
+    "rvm already installed."
+  aptInstall
+    "sassc"
+    "sassc"
+    "sassc already installed at "
+    "sassc already installed."
+  aptInstall
+    "sbt"
+    "sbt"
+    "sbt already installed at "
+    "sbt already installed."
+  aptInstall
+    "scrot"
+    "scrot"
+    "scrot already installed at "
+    "scrot already installed."
+  aptInstall
+    "slirp4setns"
+    "slirp4setns"
+    "slirp4setns already installed at "
+    "slirp4setns already installed."
+  aptInstall
+    "suckless-tools"
+    "suckless-tools"
+    "suckless-tools already installed at "
+    "suckless-tools already installed."
+  aptInstall
+    "steam"
+    "steam"
+    "steam already installed at "
+    "steam already installed."
+  aptInstall
+    "system76-cuda-latest"
+    "system76-cuda-latest"
+    "system76-cuda-latest already installed at "
+    "system76-cuda-latest already installed."
+  aptInstall
+    "system76-driver"
+    "system76-driver"
+    "system76-driver already installed at "
+    "system76-driver already installed."
+  aptInstall
+    "system76-driver-nvidia"
+    "system76-driver-nvidia"
+    "system76-driver-nvidia already installed at "
+    "system76-driver-nvidia already installed."
+  aptInstall
+    "system76-firmware"
+    "system76-firmware"
+    "system76-firmware already installed at "
+    "system76-firmware already installed."
+  aptInstall
+    "system76-scheduler"
+    "system76-scheduler"
+    "system76-scheduler already installed at "
+    "system76-scheduler already installed."
+  aptInstall
+    "tlp"
+    "tlp"
+    "tlp already installed at "
+    "tlp already installed."
+  aptInstall
+    "tlp-rdw"
+    "tlp-rdw"
+    "tlp-rdw already installed at "
+    "tlp-rdw already installed."
+  aptInstall
     "vifm"
     "vifm"
     "Vifm already installed at "
     "Vifm already installed."
+  aptInstall
+    "vimb"
+    "vimb"
+    "Vimb already installed at "
+    "Vimb already installed."
+  aptInstall
+    "va-driver-all"
+    "va-driver-all"
+    "va-driver-all already installed at "
+    "va-driver-all already installed."
   aptInstall
     "sensors"
     "lm-sensors"
@@ -601,16 +1017,16 @@ main = do
     "Brave Browser already installed."
   snapInstall
     "stable"
-    "brave"
-    "brave"
-    "Brave Browser already installed at "
-    "Brave Browser already installed."
-  snapInstall
-    "stable"
     "feedreader"
     "feedreader"
     "feedreader already installed at "
     "feedreader already installed."
+  snapInstall
+    "stable"
+    "cups"
+    "cups"
+    "cups already installed at "
+    "cups already installed."
   snapInstall
     "stable"
     "glow"
@@ -685,13 +1101,19 @@ main = do
         >> flatpakInstall "com.microsoft.Teams"
         >> flatpakInstall "com.nextcloud.desktopclient.nextcloud"
         >> flatpakInstall "com.obsproject.Studio"
+        >> flatpakInstall "com.protonvpn.www"
         >> flatpakInstall "com.slack.Slack"
         >> flatpakInstall "com.spotify.Client"
         >> flatpakInstall "com.sublimetext.three"
         >> flatpakInstall "com.valvesoftware.Steam"
+        >> flatpakInstall "dev.alextren.Spot"
+        >> flatpakInstall "engineer.atlas.Nyxt"
+        >> flatpakInstall "im.fluffychat.Fluffychat"
         >> flatpakInstall "im.riot.Riot"
+        >> flatpakInstall "io.github.mirukana.mirage"
         >> flatpakInstall "io.lbry.lbry-app"
         >> flatpakInstall "io.thp.numptyphysics"
+        >> flatpakInstall "md.obsidian.Obsidian"
         >> flatpakInstall "net.cozic.joplin_desktop"
         >> flatpakInstall "network.loki.Session"
         >> flatpakInstall "org.electrum.electrum"

@@ -58,7 +58,6 @@ plugins=(git fasd python history-substring-search colored-man-pages colorize com
 source $ZSH/oh-my-zsh.sh
 
 prompt_nix_shell_setup
-any-nix-shell zsh --info-right | source /dev/stdin
 
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
