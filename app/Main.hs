@@ -647,11 +647,6 @@ main = do
     "ibus-mozc already installed at "
     "ibus-mozc already installed."
   aptInstall
-    "icaclient"
-    "icaclient"
-    "icaclient already installed at "
-    "icaclient already installed."
-  aptInstall
     "ice"
     "ice"
     "ice already installed at "
