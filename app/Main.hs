@@ -612,7 +612,7 @@ main = do
     "gnome-themes-extra already installed."
   shells
     "sudo apt install -y gstreamer1.0-alsa gstreamer1.0-clutter-3.0 gstreamer1.0-gl \
-    \gstreamer1.0-gtk3 gstreamer1.0-pakcagekit gstreamer1.0-pipewire gstreamer1.0-plugins-base \
+    \gstreamer1.0-gtk3 gstreamer1.0-packagekit gstreamer1.0-pipewire gstreamer1.0-plugins-base \
     \gstreamer1.0-plugins-base-apps gstreamer1.0-plugins-good gstreamer1.0-pulseaudio gstreamer1.0-tools \
     \gstreamer1.0-x gstreamer1.0-0 \
     \gstreamer1.0-adapter-pulseeffects gstreamer1.0-autogain-pulseeffects gstreamer1.0-convolver-pulseeffects gstreamer1.0-crystalizer-pulseeffects \
