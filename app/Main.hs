@@ -141,7 +141,7 @@ installIceSsb =
           "Ice SSB already installed."
       Nothing ->
         shells
-          "sudo apt -y install python3-bs4 python3-soupsiev python3-lxml \
+          "sudo apt -y install python3-bs4 python3-soupsieve python3-lxml \
           \ && mkdir ice-deb && cd ice-deb && git clone https://github.com/peppermintos/ice.git \
           \ && cd ice && debuild --no-lintian -d -us -uc && sudo dpkg -i ../ice_*.deb && cd ../.. && rm -rf ice-deb \
           \ && sudo apt --fix-broken install -y"
