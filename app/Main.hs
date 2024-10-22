@@ -471,11 +471,6 @@ main = do
     "bluez-tools already installed at "
     "bluez-tools already installed."
   aptInstall
-    "brave-browser"
-    "brave-browser"
-    "brave-browser already installed at "
-    "brave-browser already installed."
-  aptInstall
     "bridge-utils"
     "bridge-utils"
     "bridge-utils already installed at "
