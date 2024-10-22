@@ -140,7 +140,7 @@ installIceSsb =
       Nothing ->
         shells
           "mkdir ice-deb && cd ice-deb && git clone https://github.com/peppermintos/ice.git \
-          \debuild --no-lintian -d -us -uc && sudo dpkg -i ../ice_*.deb"
+          \debuild -d -us -uc && sudo dpkg -i ../ice_*.deb && cd .. && rm -rf ice-deb"
           empty
 
 installRustLang :: IO ()
