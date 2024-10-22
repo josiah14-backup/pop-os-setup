@@ -685,16 +685,6 @@ main = do
     "julia already installed at "
     "julia already installed."
   aptInstall
-    "julia-common"
-    "julia-common"
-    "julia-common already installed at "
-    "julia-common already installed."
-  aptInstall
-    "julia-doc"
-    "julia-doc"
-    "julia-doc already installed at "
-    "julia-doc already installed."
-  aptInstall
     "kpartx"
     "kpartx"
     "kpartx already installed at "
