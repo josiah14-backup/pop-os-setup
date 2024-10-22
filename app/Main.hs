@@ -7,6 +7,8 @@
 -- is also something I could not automate. To do that, run these commands:
 -- gpg --generate-key
 -- pass init <the hash for the .rev filename output by the previous command>
+-- sysctl also needs to be altered to permit unprotected traffic on port 80
+-- sudo echo \"net.ipv4.ip_unprivileged_port_start=80\" >> /etc/sysctl.conf
 --
 -- This installation also does not currently handle system theming
 -- as I regard it as non-essential to the system and a rather complex
@@ -359,7 +361,6 @@ installRancherDesktop =
       >> shells "sudo usermod -a -G kvm \"$USER\"" empty
       >> shells "sudo apt -y update && sudo apt -y install rancher-desktop" empty
       >> shells "sudo sysctl -w net.ipv4.ip_unprivileged_port_start=80" empty
-      >> shells "sudo echo \"net.ipv4.ip_unprivileged_port_start=80\" >> /etc/sysctl.conf" empty
 
 installTerraform :: IO ()
 installTerraform =
