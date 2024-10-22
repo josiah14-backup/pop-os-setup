@@ -128,6 +128,21 @@ installBraveBrowser = do
           echoText (stdOutText <> stdErrText)
             >> die "ERROR: Could not add Brave ASC to apt trusted GPG Keys."
 
+installIceSsb :: IO ()
+installIceSsb =
+  which "ice"
+    >>= \case
+      Just iceLoc ->
+        echoWhichLocation
+          iceLoc
+          "Ice SSB already installed at "
+          "Ice SSB already installed."
+      Nothing ->
+        shells
+          "mkdir ice-deb && cd ice-deb && git clone https://github.com/peppermintos/ice.git \
+          \debuild --no-lintian -d -us -uc && sudo dpkg -i ../ice_*.deb"
+          empty
+
 installRustLang :: IO ()
 installRustLang =
   which "rustup"
@@ -439,7 +454,7 @@ main = do
     "cURL already installed at "
     "cURL already installed."
   shells
-    "sudo apt install -y apt-transport-https ca-certificates gnupg-agent \
+    "sudo apt install -y apt-transport-https ca-certificates devscripts gnupg-agent \
     \build-essential autoconf libffi7 libgmp10 libncurses5 libtinfo5 \
     \software-properties-common libgtk-3-dev libicu-dev libncurses-dev \
     \libgmp-dev zlib1g-dev libtinfo-dev libc6-dev libffi-dev g++ gcc make \
@@ -646,11 +661,7 @@ main = do
     "ibus-mozc"
     "ibus-mozc already installed at "
     "ibus-mozc already installed."
-  aptInstall
-    "ice"
-    "ice"
-    "ice already installed at "
-    "ice already installed."
+  installIceSsb
   aptInstall
     "inkscape"
     "inkscape"
@@ -963,6 +974,7 @@ main = do
     "K8S already installed."
   installKubectl
   installKompose
+  installIceSsb
   snapInstall
     "stable"
     "snapd"
