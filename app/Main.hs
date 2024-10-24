@@ -116,7 +116,7 @@ installSbt = do
         \| sudo -H gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/scalasbt-release.gpg --import"
         empty
       >> shells
-        "sudo chmod 644 /etc/apt/trusted.gpg.d/sclaasbt-release.gpg"
+        "sudo chmod 644 /etc/apt/trusted.gpg.d/scalasbt-release.gpg"
         empty
       >> shells
         "sudo apt update -y && sudo apt install -y sbt"
