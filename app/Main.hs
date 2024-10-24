@@ -10,6 +10,9 @@
 -- sysctl also needs to be altered to permit unprotected traffic on port 80
 -- sudo echo \"net.ipv4.ip_unprivileged_port_start=80\" >> /etc/sysctl.conf
 --
+-- because of the CLI GUI of the installer, rkhunter needs to be manually
+-- installed.
+--
 -- This installation also does not currently handle system theming
 -- as I regard it as non-essential to the system and a rather complex
 -- process to take the time to script-up.
@@ -788,16 +791,6 @@ main = do
     "rhythmbox already installed at "
     "rhythmbox already installed."
   aptInstall
-    "rkhunter"
-    "rkhunter"
-    "rkhunter already installed at "
-    "rkhunter already installed."
-  aptInstall
-    "rvm"
-    "rvm"
-    "rvm already installed at "
-    "rvm already installed."
-  aptInstall
     "sassc"
     "sassc"
     "sassc already installed at "
@@ -905,7 +898,6 @@ main = do
     "Tmux already installed."
   aptInstall "zsh" "zsh" "ZSH already installed at " "ZSH already installed."
   installOhMyZsh
-  aptInstall "jq" "jq" "jq already installed at " "jq already installed."
   aptInstall
     "ag"
     "silversearcher-ag"
@@ -1072,6 +1064,7 @@ main = do
     "thefuck already installed."
   installKinD
   installTerraform
+  shells "sudo apt autoremove -y" empty
   shells "dconf load / < gnome-settings.dconf" empty
   addFlathubRemoteExitCode <-
     shell
