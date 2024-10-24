@@ -888,11 +888,6 @@ main = do
     "Vifm already installed at "
     "Vifm already installed."
   aptInstall
-    "vimb"
-    "vimb"
-    "Vimb already installed at "
-    "Vimb already installed."
-  aptInstall
     "va-driver-all"
     "va-driver-all"
     "va-driver-all already installed at "
