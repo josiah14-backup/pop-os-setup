@@ -838,11 +838,6 @@ main = do
     "scrot already installed at "
     "scrot already installed."
   aptInstall
-    "slirp4setns"
-    "slirp4setns"
-    "slirp4setns already installed at "
-    "slirp4setns already installed."
-  aptInstall
     "suckless-tools"
     "suckless-tools"
     "suckless-tools already installed at "
