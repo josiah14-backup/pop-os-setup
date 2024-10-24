@@ -86,6 +86,42 @@ snapInstall channelName binName packageName foundPrefix foundErrText =
                   die ("ERROR: Could not install " <> packageName)
       Just loc -> echoWhichLocation loc foundPrefix foundErrText
 
+-- echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
+-- echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | sudo tee /etc/apt/sources.list.d/sbt_old.list
+-- curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo -H gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/scalasbt-release.gpg --import
+-- sudo chmod 644 /etc/apt/trusted.gpg.d/scalasbt-release.gpg
+-- sudo apt-get update
+-- sudo apt-get install sbt
+
+installSbt :: IO ()
+installSbt = do
+  sbtInstalled <- which "sbt"
+  case sbtInstalled of
+    Just sbtLoc ->
+      echoWhichLocation
+        sbtLoc
+        "sbt already installed at "
+        "sbt already installed."
+    Nothing -> do
+      shells
+        "echo \"deb https://repo.scala-sbt.org/scalasbt/debian all main\" \
+        \| sudo tee /etc/apt/sources.list.d/sbt.list"
+        empty
+      >> shells
+        "echo \"deb https://repo.scala-sbt.org/scalasbt/debian /\" \
+        \| sudo tee /etc/apt/sources.list.d/sbt_old.list"
+        empty
+      >> shells
+        "curl -sL \"https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823\" \
+        \| sudo -H gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/scalasbt-release.gpg --import"
+        empty
+      >> shells
+        "sudo chmod 644 /etc/apt/trusted.gpg.d/sclaasbt-release.gpg"
+        empty
+      >> shells
+        "sudo apt update -y && sudo apt install -y sbt"
+        empty
+
 installBraveBrowser :: IO ()
 installBraveBrowser = do
   -- Need to pipe some things together to get Brave to download correctly
@@ -795,11 +831,7 @@ main = do
     "sassc"
     "sassc already installed at "
     "sassc already installed."
-  aptInstall
-    "sbt"
-    "sbt"
-    "sbt already installed at "
-    "sbt already installed."
+  installSbt
   aptInstall
     "scrot"
     "scrot"
