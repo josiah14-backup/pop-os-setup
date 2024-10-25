@@ -1091,12 +1091,12 @@ main = do
   addFlathubRemoteExitCode <-
     shell
       "flatpak remote-add --if-not-exists flathub \
-      \ https://dl.flathub.org/repo/flathub.flatpakrepo"
+      \ flathub.org/repo/flathub.flatpakrepo"
       empty
   addFlathubBetaRemoteExitCode <-
     shell
       "flatpak remote-add --if-not-exists flathub-beta \
-      \ https://dl.flathub.org/beta-repo/flathub-beta.flatpakrepo"
+      \ https://flathub.org/beta-repo/flathub-beta.flatpakrepo"
       empty
   case (addFlathubRemoteExitCode, addFlathubBetaRemoteExitCode) of
     (ExitSuccess, ExitSuccess) ->
