@@ -1091,7 +1091,7 @@ main = do
   addFlathubRemoteExitCode <-
     shell
       "flatpak remote-add --if-not-exists flathub \
-      \ flathub.org/repo/flathub.flatpakrepo"
+      \ https://flathub.org/repo/flathub.flatpakrepo"
       empty
   addFlathubBetaRemoteExitCode <-
     shell
