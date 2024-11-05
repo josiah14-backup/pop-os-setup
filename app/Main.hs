@@ -13,6 +13,10 @@
 -- because of the CLI GUI of the installer, rkhunter needs to be manually
 -- installed.
 --
+-- The Mirage Matrix client requires a manual download and is more effort than
+-- it's worth to automate the install. Follow the directions here:
+-- https://github.com/mirukana/mirage/blob/master/docs/INSTALL.md#flatpak
+--
 -- This installation also does not currently handle system theming
 -- as I regard it as non-essential to the system and a rather complex
 -- process to take the time to script-up.
@@ -1120,7 +1124,6 @@ main = do
         >> flatpakInstall "engineer.atlas.Nyxt"
         >> flatpakInstall "im.fluffychat.Fluffychat"
         >> flatpakInstall "im.riot.Riot"
-        >> flatpakInstall "io.github.mirukana.mirage"
         >> flatpakInstall "io.lbry.lbry-app"
         >> flatpakInstall "io.thp.numptyphysics"
         >> flatpakInstall "md.obsidian.Obsidian"
