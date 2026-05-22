@@ -484,6 +484,21 @@ installPythonPoetry =
       )
         >> shells "echo 'export PATH=\"${HOME}/.poetry/bin:${PATH}\"' >> ~/.zprofile" empty
 
+installProtonVpn :: IO ()
+installProtonVpn =
+  shellStrictWithErr "dpkg -l proton-vpn-gnome-desktop | grep -q '^ii'" empty
+    >>= \case
+      (ExitSuccess, _, _) -> echo "ProtonVPN already installed."
+      (ExitFailure _, _, _) ->
+        shells
+          "wget -q -O /tmp/protonvpn-stable-release.deb \
+          \https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.6_all.deb"
+          empty
+          >> shells "sudo dpkg -i /tmp/protonvpn-stable-release.deb" empty
+          >> shells "sudo apt -y update" empty
+          >> shells "sudo apt install -y proton-vpn-gnome-desktop" empty
+          >> shells "rm -f /tmp/protonvpn-stable-release.deb" empty
+
 main :: IO ()
 main = do
   shell "sudo apt -y update && sudo apt -y upgrade" empty
@@ -539,6 +554,16 @@ main = do
     "cheese"
     "cheese already installed at "
     "cheese already installed."
+  aptInstall
+    "clamscan"
+    "clamav"
+    "ClamAV already installed at "
+    "ClamAV already installed."
+  aptInstall
+    "clamd"
+    "clamav-daemon"
+    "ClamAV daemon already installed at "
+    "ClamAV daemon already installed."
   aptInstall
     "chrome-gnome-shell"
     "chrome-gnome-shell"
@@ -649,6 +674,11 @@ main = do
     "git"
     "Git already installed at "
     "Git already installed."
+  aptInstall
+    "gh"
+    "gh"
+    "GitHub CLI already installed at "
+    "GitHub CLI already installed."
   aptInstall
     "gnome-settings-daemon"
     "gnome-settings-daemon"
@@ -768,6 +798,11 @@ main = do
     "mesa-va-drivers already installed at "
     "mesa-va-drivers already installed."
   aptInstall
+    "most"
+    "most"
+    "most already installed at "
+    "most already installed."
+  aptInstall
     "nvidia-driver-560"
     "nvidia-driver-560"
     "nvidia-driver-560 already installed at "
@@ -817,7 +852,18 @@ main = do
     "qutebrowser"
     "qutebrowser already installed at "
     "qutebrowser already installed."
+  aptInstall
+    "racket"
+    "racket"
+    "Racket already installed at "
+    "Racket already installed."
+  aptInstall
+    "rclone"
+    "rclone"
+    "rclone already installed at "
+    "rclone already installed."
   installRancherDesktop
+  installProtonVpn
   aptInstall
     "rhythmbox"
     "rhythmbox"
@@ -834,6 +880,11 @@ main = do
     "scrot"
     "scrot already installed at "
     "scrot already installed."
+  aptInstall
+    "smartctl"
+    "smartmontools"
+    "smartmontools already installed at "
+    "smartmontools already installed."
   aptInstall
     "suckless-tools"
     "suckless-tools"
@@ -885,6 +936,11 @@ main = do
     "Vifm already installed at "
     "Vifm already installed."
   aptInstall
+    "xournalpp"
+    "xournalpp"
+    "Xournal++ already installed at "
+    "Xournal++ already installed."
+  aptInstall
     "va-driver-all"
     "va-driver-all"
     "va-driver-all already installed at "
@@ -905,6 +961,11 @@ main = do
     "screenfetch already installed at "
     "screenfetch already installed."
   aptInstall
+    "neofetch"
+    "neofetch"
+    "neofetch already installed at "
+    "neofetch already installed."
+  aptInstall
     "gnome-tweaks"
     "gnome-tweaks"
     "Gnome Tweaks already installed at "
@@ -915,6 +976,11 @@ main = do
     "tmux"
     "Tmux already installed at "
     "Tmux already installed."
+  aptInstall
+    "thefuck"
+    "thefuck"
+    "thefuck already installed at "
+    "thefuck already installed."
   aptInstall "zsh" "zsh" "ZSH already installed at " "ZSH already installed."
   installOhMyZsh
   aptInstall
@@ -934,6 +1000,11 @@ main = do
     "Go already installed at "
     "Go already installed."
   aptInstall "npm" "npm" "NPM already installed at " "NPM already installed."
+  aptInstall
+    "nc"
+    "netcat-openbsd"
+    "netcat already installed at "
+    "netcat already installed."
   aptInstall
     "python3"
     "python3"
@@ -1076,11 +1147,11 @@ main = do
     "Emacs already installed at "
     "Emacs already installed."
   snapInstall
-    "edge"
-    "thefuck"
-    "--classic thefuck"
-    "thefuck already installed at "
-    "thefuck already installed."
+    "stable"
+    "chromium"
+    "chromium"
+    "Chromium already installed at "
+    "Chromium already installed."
   installKinD
   installTerraform
   shells "sudo apt autoremove -y" empty
@@ -1101,39 +1172,35 @@ main = do
         >> flatpakInstall "com.bitwarden.desktop"
         >> flatpakInstall "com.brave.Browser"
         >> flatpakInstall "com.discordapp.Discord"
-        >> flatpakInstall "com.github.Eloston.UngoogledChromium"
-        >> flatpakInstall "com.github.Eloston.UngoogledChromium.Codecs"
         >> flatpakInstall "com.github.inercia.k3x"
-        >> flatpakInstall "com.jetbrains.PyCharm-Community"
-        >> flatpakInstall "com.microsoft.Teams"
+        >> flatpakInstall "com.github.tchx84.Flatseal"
+        >> flatpakInstall "com.jetbrains.PyCharm-Professional"
         >> flatpakInstall "com.nextcloud.desktopclient.nextcloud"
         >> flatpakInstall "com.obsproject.Studio"
-        >> flatpakInstall "com.protonvpn.www"
+        >> flatpakInstall "com.rtosta.zapzap"
         >> flatpakInstall "com.slack.Slack"
         >> flatpakInstall "com.spotify.Client"
         >> flatpakInstall "com.sublimetext.three"
         >> flatpakInstall "com.valvesoftware.Steam"
-        >> flatpakInstall "dev.alextren.Spot"
         >> flatpakInstall "engineer.atlas.Nyxt"
         >> flatpakInstall "im.fluffychat.Fluffychat"
         >> flatpakInstall "im.riot.Riot"
-        >> flatpakInstall "io.lbry.lbry-app"
+        >> flatpakInstall "io.github.ungoogled_software.ungoogled_chromium"
         >> flatpakInstall "io.thp.numptyphysics"
         >> flatpakInstall "md.obsidian.Obsidian"
         >> flatpakInstall "net.cozic.joplin_desktop"
         >> flatpakInstall "network.loki.Session"
         >> flatpakInstall "org.electrum.electrum"
         >> flatpakInstall "org.gimp.GIMP"
-        >> flatpakInstall "org.gimp.GIMP.Manual"
         >> flatpakInstall "org.gnome.Fractal"
         >> flatpakInstall "org.gnome.Rhythmbox3"
         >> flatpakInstall "org.gnome.Solanum"
         >> flatpakInstall "org.mozilla.firefox"
+        >> flatpakInstall "org.mozilla.Thunderbird"
         >> flatpakInstall "org.musescore.MuseScore"
         >> flatpakInstall "org.remmina.Remmina"
         >> flatpakInstall "org.signal.Signal"
         >> flatpakInstall "org.telegram.desktop"
-        >> flatpakInstall "org.telegram.desktop.webview"
         >> flatpakInstall "us.zoom.Zoom"
     (ExitFailure exitCode, ExitSuccess) -> die "Could not add the remote 'flathub'."
     (ExitSuccess, ExitFailure exitCode) -> die "Could not add the remote 'flathub-beta'."
