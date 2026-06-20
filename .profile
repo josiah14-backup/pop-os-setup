@@ -35,3 +35,5 @@ if [ -e /home/josiah/.nix-profile/etc/profile.d/nix.sh ]; then . /home/josiah/.n
 export PATH="$HOME/.poetry/bin:$PATH"
 
 export RUST_SRC_PATH=/home/josiah/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library
+
+[ -f "/home/josiah/.ghcup/env" ] && . "/home/josiah/.ghcup/env" # ghcup-env

@@ -49,6 +49,9 @@ ZSH_THEME="avit"
 
 export EDITOR=vim
 
+export FULLNAME="Josiah Berkebile"
+export EMAIL="josiah.berkebile@protonmail.com"
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
@@ -92,18 +95,47 @@ bindkey -M vicmd 'j' history-substring-search-down
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
 
-export PATH=/home/josiah/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/git-tf-2.0.3:/usr/local/bin/git-tf-2.0.3:/home/josiah/.local/bin:/usr/local/android-sdk/bin:/usr/local/android-sdk/tools:/usr/local/android-sdk/tools/bin:/home/josiah/.nix-profile/bin:/home/josiah/.nix-profile/sbin:/home/josiah/.cabal/bin:/home/josiah/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/git-tf-2.0.3:/usr/local/bin/git-tf-2.0.3:/home/josiah/.local/bin:/usr/local/android-sdk/bin:/usr/local/android-sdk/tools:/usr/local/android-sdk/tools/bin:/home/josiah/.local/bin:/home/josiah/.nix-profile/bin:/home/josiah/.nix-profile/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/home/josiah/programs/intellij/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/android-sdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/android-sdk/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/usr/share/maven/bin:/home/josiah/.conscript/bin
-#
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export LIBRARY_PATH="/usr/lib/gcc/x86_64-linux-gnu/9"
-export PATH="$PATH:$HOME/.rvm/bin"
-export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="${PATH}:${HOME}/.krew/bin"
-export PATH="$HOME/.local/app-img:$PATH" 
-export PATH="$HOME/.radicle/bin:$PATH"
-export PATH="$PATH:/home/josiah/.local/share/coursier/bin"
-export RUST_SRC_PATH=/home/josiah/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library
-alias screeps-dir=/home/josiah/.config/Screeps/scripts/screeps.com/tutorial-1
+export RUST_SRC_PATH=$HOME/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library
+export PYENV_ROOT="$HOME/.pyenv"
+
+# typeset -U path deduplicates $path (zsh's array mirror of $PATH) on every
+# source, so re-sourcing this file never appends duplicate entries.
+typeset -U path
+path=(
+  $HOME/.local/bin
+  $HOME/.rd/bin
+  $HOME/.cargo/bin
+  $HOME/.poetry/bin
+  $PYENV_ROOT/bin
+  $HOME/miniconda3/bin
+  $HOME/.local/app-img
+  $HOME/.radicle/bin
+  $HOME/.rvm/bin
+  $HOME/.krew/bin
+  $HOME/.local/share/coursier/bin
+  $HOME/.conscript/bin
+  $HOME/.nix-profile/bin
+  $HOME/.nix-profile/sbin
+  $HOME/.cabal/bin
+  $HOME/programs/intellij/bin
+  /usr/lib/jvm/java-8-oracle/bin
+  /usr/lib/jvm/java-8-oracle/db/bin
+  /usr/lib/jvm/java-8-oracle/jre/bin
+  /usr/lib/jvm/java-8-openjdk-amd64/bin
+  /usr/share/maven/bin
+  $HOME/.local/share/racket/8.2/bin
+  /usr/local/sbin
+  /usr/local/bin
+  /usr/sbin
+  /usr/bin
+  /sbin
+  /bin
+  /usr/games
+  /usr/local/games
+  /snap/bin
+  $path
+)
 
 set -o vi
 
@@ -111,36 +143,45 @@ alias j='z'
 alias jj='zz'
 alias zshrc='v ~/.zshrc'
 alias lpgp="lpass show --password -c"
+alias screeps-dir=$HOME/.config/Screeps/scripts/screeps.com/tutorial-1
+alias ssh-tnw="ssh -p 1488 amnesia@208.94.243.156"
+alias fd=fdfind
+alias ipyvi="ipython --TerminalInteractiveShell.editing_mode=vi"
 
 export HISTCONTROL=ignoreboth
 
-# added by Miniconda3 installer
-export PATH="/home/josiah/miniconda3/bin:$PATH"
-. /home/josiah/miniconda3/etc/profile.d/conda.sh
-alias ipyvi="ipython --TerminalInteractiveShell.editing_mode=vi"
+# FaradAI settings
+export FARADAI_MEMORY=16g
+export FARADAI_CPUS=8
+export FARADAI_PIDS=1024
+export FARADAI_TRUST_SSH_AGENT=1
+export FARADAI_MOUNT_NIX_STORE=1
 
-export PATH="/home/josiah/.nix-profile/bin:/home/josiah/.nix-profile/sbin:/home/josiah/.cabal/bin:$PATH"
+. $HOME/miniconda3/etc/profile.d/conda.sh
+eval "$(pyenv init -)"
 eval $(thefuck --alias)
 source <(kompose completion zsh)
-alias fd=fdfind
 
-alias ssh-tnw="ssh -p 1488 amnesia@208.94.243.156"
-
-export PATH="${HOME}/.poetry/bin:${PATH}"
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
-if [ -e /home/josiah/.nix-profile/etc/profile.d/nix.sh ]; then . /home/josiah/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
+  . $HOME/.nix-profile/etc/profile.d/nix.sh
+fi
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/josiah/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/home/josiah/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f "$HOME/Downloads/google-cloud-sdk/path.zsh.inc" ]; then
+  . "$HOME/Downloads/google-cloud-sdk/path.zsh.inc"
+fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/home/josiah/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/josiah/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
-
-#export SBT_CREDENTIALS="$HOME/.ivy2/.credentials"
+if [ -f "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc" ]; then
+  . "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc"
+fi
 
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
 export PATH="/home/josiah/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+
+if [ -z "$SSH_AUTH_SOCK" ]; then
+  eval "$(ssh-agent -s)"
+fi
+
+[ -f "/home/josiah/.ghcup/env" ] && . "/home/josiah/.ghcup/env" # ghcup-env
